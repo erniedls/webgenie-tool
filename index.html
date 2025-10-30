@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebGenie Webinar Structure Checker v2 | The Webinar Authority</title>
+    <title>WebGenie Webinar Structure Checker v2</title>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -11,315 +11,750 @@
 </head>
 <body>
     <div id="root"></div>
-    <script type="text/babel">
-        const { useState } = React;
-        
-        // Icon Components
-        const Upload = () => (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="17 8 12 3 7 8"/>
-                <line x1="12" y1="3" x2="12" y2="15"/>
-            </svg>
-        );
-        
-        const FileText = () => (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                <polyline points="14 2 14 8 20 8"/>
-                <line x1="16" y1="13" x2="8" y2="13"/>
-                <line x1="16" y1="17" x2="8" y2="17"/>
-            </svg>
-        );
-        
-        const AlertTriangle = () => (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
-                <line x1="12" y1="9" x2="12" y2="13"/>
-                <line x1="12" y1="17" x2="12.01" y2="17"/>
-            </svg>
-        );
-        
-        const Download = () => (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="7 10 12 15 17 10"/>
-                <line x1="12" y1="15" x2="12" y2="3"/>
-            </svg>
-        );
-        
-        const History = () => (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-                <path d="M3 3v5h5"/>
-                <path d="M12 7v5l4 2"/>
-            </svg>
-        );
-        
-        const Eye = () => (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
-                <circle cx="12" cy="12" r="3"/>
-            </svg>
-        );
-        
-        const RotateCcw = () => (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-                <path d="M3 3v5h5"/>
-            </svg>
-        );
+    <script type="text/babel">import React, { useState } from 'react';
+import { Upload, FileText, AlertTriangle, Download, History, Eye, RotateCcw } from 'lucide-react';
 
-        function WebGenieChecker() {
-            const [activeTab, setActiveTab] = useState('results');
-            const [outline, setOutline] = useState('');
-            const [title, setTitle] = useState('');
-            const [niche, setNiche] = useState('');
-            const [audience, setAudience] = useState('');
-            const [analysisData, setAnalysisData] = useState(null);
-            const [history, setHistory] = useState([]);
+const WebGenieChecker = () => {
+  const [activeTab, setActiveTab] = useState('results');
+  const [outline, setOutline] = useState('');
+  const [title, setTitle] = useState('');
+  const [niche, setNiche] = useState('');
+  const [audience, setAudience] = useState('');
+  const [analysisData, setAnalysisData] = useState(null);
+  const [history, setHistory] = useState([]);
 
-            const niches = [
-                'Leadership/Career',
-                'SaaS/Tech',
-                'Health & Wellness',
-                'Consultant',
-                'Marketing/Sales',
-                'Finance/Business',
-                'Other'
-            ];
-const handleFileUpload = (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        setOutline(event.target.result);
-                    };
-                    reader.readAsText(file);
-                }
-            };
+  const niches = [
+    'Leadership/Career',
+    'SaaS/Tech',
+    'Health & Wellness',
+    'Consultant',
+    'Marketing/Sales',
+    'Finance/Business',
+    'Other'
+  ];
 
-            const resetAll = () => {
-                setOutline('');
-                setTitle('');
-                setNiche('');
-                setAudience('');
-                setAnalysisData(null);
-                setActiveTab('results');
-                const fileInput = document.querySelector('input[type="file"]');
-                if (fileInput) fileInput.value = '';
-            };
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setOutline(event.target.result);
+      };
+      reader.readAsText(file);
+    }
+  };
 
-            const getRiskInfo = (risk) => {
-                const riskData = {
-                    vanishing: { name: 'The Vanishing Act', color: 'bg-red-500', desc: 'No-shows killing your numbers' },
-                    crickets: { name: 'The Crickets Curse', color: 'bg-orange-500', desc: 'Zero engagement everywhere' },
-                    glazed: { name: 'The Eyes-Glazed Effect', color: 'bg-yellow-500', desc: 'Mentally checked out' },
-                    ghost: { name: 'The Post-Webinar Ghost', color: 'bg-purple-500', desc: 'Great vibes, zero sales' }
-                };
-                return riskData[risk];
-            };
+  const resetAll = () => {
+    setOutline('');
+    setTitle('');
+    setNiche('');
+    setAudience('');
+    setAnalysisData(null);
+    setActiveTab('results');
+    
+    // Reset file input
+    const fileInput = document.querySelector('input[type="file"]');
+    if (fileInput) {
+      fileInput.value = '';
+    }
+  };
 
-            const getScoreColor = (score) => {
-                if (score >= 80) return 'text-green-600 bg-green-50';
-                if (score >= 60) return 'text-yellow-600 bg-yellow-50';
-                return 'text-red-600 bg-red-50';
-            };
+  const getRiskInfo = (risk) => {
+    const riskData = {
+      vanishing: { name: 'The Vanishing Act', color: 'bg-red-500', desc: 'No-shows killing your numbers' },
+      crickets: { name: 'The Crickets Curse', color: 'bg-orange-500', desc: 'Zero engagement, tab-hoppers everywhere' },
+      glazed: { name: 'The Eyes-Glazed Effect', color: 'bg-yellow-500', desc: 'They\'re mentally checked out' },
+      ghost: { name: 'The Post-Webinar Ghost', color: 'bg-purple-500', desc: 'Great vibes, zero sales' }
+    };
+    return riskData[risk];
+  };
 
-            const sectionLabels = {
-                introduction: 'Introduction',
-                stick: 'Stick Strategies',
-                salesStory: 'Sales Story',
-                setStage: 'Set the Stage',
-                coreContent: 'Core Content',
-                transition: 'Transition',
-                close: 'The Close',
-                layering: 'Layering',
-                prepWork: 'Prep Work'
-            };
+  const getScoreColor = (score) => {
+    if (score >= 80) return 'text-green-600 bg-green-50';
+    if (score >= 60) return 'text-yellow-600 bg-yellow-50';
+    return 'text-red-600 bg-red-50';
+  };
 
-            const analyzeOutline = () => {
-                const text = outline.toLowerCase();
-                
-                const baseScores = {
-                    introduction: text.includes('intro') || text.includes('welcome') || text.includes('hook') ? 85 : 45,
-                    stick: text.includes('stick') || text.includes('stay') || text.includes('why') ? 75 : 40,
-                    salesStory: text.includes('story') || text.includes('credibility') ? 80 : 35,
-                    setStage: text.includes('problem') || text.includes('pain') || text.includes('urgency') ? 90 : 50,
-                    coreContent: text.includes('teach') || text.includes('framework') || text.includes('step') ? 95 : 60,
-                    transition: text.includes('transition') || text.includes('next') || text.includes('invite') ? 70 : 30,
-                    close: text.includes('offer') || text.includes('cta') || text.includes('buy') ? 85 : 25,
-                    layering: text.includes('bonus') || text.includes('guarantee') ? 65 : 35,
-                    prepWork: text.includes('prep') || text.includes('survey') || text.includes('before') ? 60 : 40
-                };
+  const generateFixes = (scores, risks, selectedNiche, selectedAudience) => {
+    const fixes = [];
+    
+    // Helper function to randomly select from variations
+    const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+    
+    // Helper to get niche-specific variations
+    const getNicheVariations = (genericVariations, nicheSpecific) => {
+      const allVariations = [...genericVariations];
+      if (selectedNiche && nicheSpecific[selectedNiche]) {
+        allVariations.push(...nicheSpecific[selectedNiche]);
+      }
+      return allVariations;
+    };
+    
+    if (scores.introduction < 70) {
+      const variations = [
+        {
+          issue: 'Your hook isn\'t landing — attendees won\'t know why they\'re here or what they\'ll gain.',
+          fix: 'Start with one clear sentence that names their goal or pain point. Follow it with a promise they can picture: "In the next 45 minutes, you\'ll walk away with X." Keep it tight — 10 words or less for the promise. This isn\'t about being clever; it\'s about being clear.',
+          impact: 'Stops the tab-hopping in the first 90 seconds. When they know what\'s in it for them right away, they lean in instead of tuning out.'
+        },
+        {
+          issue: 'The opening doesn\'t tell them why this matters to them right now — so they\'re already halfway out the door.',
+          fix: 'Lead with what they want, not what you\'re going to teach. One sentence: "You\'re here because you want X." Then promise them the exact outcome they came for in 10 words or fewer. Ditch the preamble and get straight to what\'s in it for them.',
+          impact: 'Cuts the wondering and wandering in half. A clear hook means they settle in and commit instead of checking their phone.'
+        },
+        {
+          issue: 'You\'re losing people before minute two because they can\'t see the payoff yet.',
+          fix: 'Open by naming their exact goal or frustration — something so specific they think "wait, are they reading my mind?" Then give them the promise: what they\'ll have by the end. Make it concrete, visual, and tight. No fluff, no setup — just the win they came for.',
+          impact: 'Gets them nodding yes in the first 90 seconds. That early buy-in carries through the entire webinar.'
+        },
+        {
+          issue: 'There\'s no clear "what\'s in it for me" moment at the top — so people are already checking out.',
+          fix: 'Nail the first sentence: name the problem or goal that brought them here. Then immediately follow with your promise — what they\'ll be able to do by the end. Make it tangible, not theoretical. "You\'ll walk away knowing how to X" beats "We\'ll explore the concept of X" every single time.',
+          impact: 'A strong hook buys you attention for the next 40 minutes. A weak one costs you half your audience before you even start teaching.'
+        },
+        {
+          issue: 'The intro feels like throat-clearing instead of a reason to stay.',
+          fix: 'Cut everything before the value. Start with their pain point or desired outcome in one sentence, then make a promise they can visualize: "Today you\'re getting the exact framework I use to..." Keep it simple, direct, and benefit-loaded. Save the background story for later — lead with the win.',
+          impact: 'First impressions set the tone for everything. A tight, benefit-driven hook keeps people engaged instead of multitasking.'
+        },
+        {
+          issue: 'Your opening leaves them guessing about whether this webinar is actually for them.',
+          fix: 'Be explicit about who this is for and what they\'re getting. Open with: "If you\'re struggling with X, you\'re in the right place. In the next hour, you\'ll learn how to Y." No mystery, no clever setup — just clarity. When they know it\'s for them and what they\'re getting, they commit.',
+          impact: 'Clarity converts. Ambiguity loses people. A crystal-clear intro ensures the right people stay and the wrong people self-select out early.'
+        }
+      ];
+      const chosen = pick(variations);
+      fixes.push({ priority: 'HIGH', section: 'Introduction', ...chosen });
+    }
 
-                const nicheWeights = {
-                    'Leadership/Career': { salesStory: 1.2, setStage: 1.1 },
-                    'SaaS/Tech': { coreContent: 1.3, transition: 1.1, close: 1.1 },
-                    'Health & Wellness': { setStage: 1.3, salesStory: 1.2, stick: 1.1 },
-                    'Consultant': { salesStory: 1.25, close: 1.2, transition: 1.15 }
-                };
+    if (scores.stick < 70) {
+      const variations = [
+        {
+          issue: 'There\'s no reason to stay — half your audience will bounce by minute 12 because they don\'t see the payoff coming.',
+          fix: 'Add a "stay promise" in your first paragraph. Tell them the one tangible thing they\'ll leave with today — a framework, a script, a decision tool. Then remind them of it every 8-10 minutes. You\'re not over-promising; you\'re giving them a reason to invest their time instead of checking email.',
+          impact: 'Cuts early drop-off by 40% or more. People stay when they trust you\'ll deliver what you said you would.'
+        },
+        {
+          issue: 'Your content might be solid, but they don\'t know that yet — so they\'re bailing early.',
+          fix: 'In the first three minutes, tell them exactly what they\'re walking away with. Be specific: not "clarity," but "the three-question filter I use to cut decision time in half." Then circle back to that promise at the 10-minute mark and again at 20. Repetition builds trust.',
+          impact: 'Keeps butts in seats through the messy middle. When they know the destination, they\'re willing to take the journey.'
+        },
+        {
+          issue: 'You haven\'t given them a compelling reason to stick around past the intro — so they won\'t.',
+          fix: 'Front-load the value promise. Tell them the one thing they\'ll be able to do differently tomorrow because of this webinar. Make it practical, not conceptual. Then reinforce it throughout: "This is what I promised you — here it comes." Treat attention like currency and earn it early.',
+          impact: 'Drop-off rate plummets. They stay because you showed them the gold at the beginning, not just hinted at it.'
+        },
+        {
+          issue: 'People are leaving by minute 15 because they\'re not convinced the juice is worth the squeeze.',
+          fix: 'Make a concrete "stay promise" upfront: "By the end of this, you\'ll have X that you can use immediately." Be ultra-specific — not a concept, but a tool or framework or script. Then anchor back to it every few minutes: "Remember that thing I promised? We\'re building it right now." Keep the promise visible.',
+          impact: 'Attention spans are short. A clear promise gives them a reason to keep watching even when their inbox is calling.'
+        },
+        {
+          issue: 'There\'s no through-line holding attention — they\'re drifting because they don\'t see where this is going.',
+          fix: 'Create a verbal breadcrumb trail. Tell them early what they\'re getting, then reference it throughout: "This is step one of that framework I mentioned" or "Here\'s the payoff I promised you." Make the destination visible from the start and keep reminding them they\'re on the path to it.',
+          impact: 'Consistency builds trust. When you keep your promise visible, people stay engaged because they can see progress toward the win you offered.'
+        },
+        {
+          issue: 'The value isn\'t clear enough early on, so people assume it\'s coming "eventually" and leave before it does.',
+          fix: 'Tell them what they\'re getting in the first two minutes, and make it something they can use today. Not aspirational language — tangible deliverables. Then deliver on that promise in chunks throughout, calling back to it explicitly: "This is the first piece of what I promised." Proof of delivery keeps people watching.',
+          impact: 'Early proof of value earns you the right to their attention. Once they see you\'re delivering, they stop second-guessing whether to stay.'
+        }
+      ];
+      const chosen = pick(variations);
+      fixes.push({ priority: 'CRITICAL', section: 'Stick Strategies', ...chosen });
+    }
 
-                const weights = nicheWeights[niche] || {};
-                const scores = {};
-                
-                Object.keys(baseScores).forEach(key => {
-                    scores[key] = Math.min(100, Math.round(baseScores[key] * (weights[key] || 1.0)));
-                });
+    if (scores.salesStory < 70) {
+      const genericVariations = [
+        {
+          issue: 'You\'re missing the credibility bridge — they don\'t know why they should trust you or believe this will work for them.',
+          fix: 'Share one 30-second story about someone you helped. Keep it simple: who they were, what changed, and why it matters to the people watching right now. This isn\'t about bragging — it\'s about proving you\'ve walked this path before and you know the way forward.',
+          impact: 'Builds trust before you ever ask for the sale. Stories create belief faster than any list of credentials ever could.'
+        },
+        {
+          issue: 'They don\'t know if you can actually help them or if you\'re just good at talking about it.',
+          fix: 'Tell one quick story — 30 seconds max — about a real person you helped. Focus on the before and after: where they started, what shifted, what became possible. Make it relatable, not impressive. The goal is connection, not awe.',
+          impact: 'Trust builds in seconds when they see themselves in your story. Credentials inform; stories persuade.'
+        }
+      ];
+      
+      const nicheSpecific = {
+        'Leadership/Career': [
+          {
+            issue: 'Leadership audiences follow self-awareness faster than credentials — but you haven\'t shown them you understand their struggle.',
+            fix: 'Use the Struggle→Discovery→Transformation arc from your content. Start with a relatable leadership moment: "Meet Sarah, stuck at director level for three years despite brilliant work." Show the discovery (what shifted her thinking), then the transformation (VP role within 90 days). Make it human first, impressive second.',
+            impact: 'When they see themselves in your story, they think "that could be me." That\'s when authority becomes trust.'
+          },
+          {
+            issue: 'You\'re listing what you do instead of showing who you\'ve helped become who they wanted to be.',
+            fix: 'Frame your credibility story around purpose, not position. "I realized leadership was less about the corner office and more about the clarity I could bring others." Then immediately bridge to a client: "Like Marcus, who went from avoiding difficult conversations to leading them with confidence." That\'s your origin story meeting their aspiration.',
+            impact: 'Audiences follow purpose-driven guides. Show them you earned your authority through focused transformation work, and they\'ll trust you to guide theirs.'
+          },
+          {
+            issue: 'Your credentials create distance instead of connection — they need to see you\'ve been in the trenches.',
+            fix: 'Drop in one "I\'ve been there" micro-moment early. "I once coached a VP drowning in meetings who couldn\'t find time to mentor her team. Sound familiar?" Then show what changed: "After we built her communication clarity system, she got three hours back per week — and her team engagement scores jumped 40%." That\'s empathy meeting evidence.',
+            impact: 'Leadership clients don\'t just buy expertise — they buy understanding. Show you get their world and they\'ll lean in.'
+          }
+        ],
+        'SaaS/Tech': [
+          {
+            issue: 'Tech audiences are skeptical by default — they need proof your solution actually works in production, not just in theory.',
+            fix: 'Use the STR Arc format from your best case studies. Start with the human mess: "A mid-market PM platform was losing free-tier users at 80% before activation." Surface the Trigger: "We discovered their onboarding was teaching features, not outcomes." Reveal the Result with metrics: "After implementing our STR-based activation sprint, conversion jumped 37% and average engagement time went from 11 to 24 minutes." Numbers + narrative = credibility.',
+            impact: 'SaaS buyers trust data wrapped in story. One concrete STR example with metrics builds more authority than five vague testimonials.'
+          },
+          {
+            issue: 'You\'re talking about your methodology but not showing the operational transformation it creates.',
+            fix: 'Share a technical before/after that speaks their language. "Company X was spending 20 hours a week on manual data sync between their CRM and product analytics. After we integrated our behavioral data loop, that dropped to automated real-time updates — and their RevOps team reclaimed an entire day per week." Use their terminology: APIs, workflows, integration points. Show you speak tech, not just business buzzwords.',
+            impact: 'Technical audiences need to know you understand their constraints. Speak their stack and they\'ll trust you know what you\'re doing.'
+          },
+          {
+            issue: 'Your case study reads like a feature list instead of a revenue story.',
+            fix: 'Restructure your proof around pipeline impact: "Client challenge: low activation from free tier. Our approach: STR Arc + 14-day Activation Sprint. Result: 65% increase in registration-to-paid conversion, with automated CRM tagging that shortened sales cycles by 18 days." Connect your solution directly to their growth metrics. That\'s the language of SaaS leadership.',
+            impact: 'When you operationalize insight and show measurable revenue lift, skeptics become believers. Proof in their KPIs = instant credibility.'
+          }
+        ],
+        'Health & Wellness': [
+          {
+            issue: 'Wellness audiences need emotional permission before they\'ll trust your expertise — you haven\'t addressed the "I don\'t want to sound salesy" fear.',
+            fix: 'Open with permission-giving language: "If you\'ve ever worried that charging fairly means selling out — I get it. But here\'s the truth: sales is just structured service." Then immediately share a transformation story that normalizes earning: "Meet Dr. Leah, a holistic nutrition coach who felt guilty about her pricing. After we optimized her story flow and added a clear CTA, she hit 52% conversion — and said, \'I stopped chasing algorithms and started scheduling outcomes.\'" Frame money as mission fuel.',
+            impact: 'Health entrepreneurs need to know profitability and purpose can coexist. One relatable transformation story removes the shame and opens the door to action.'
+          },
+          {
+            issue: 'You\'re sharing results without showing the emotional journey — and wellness decisions are emotional first.',
+            fix: 'Lead with the internal struggle, not the external metric. "Lisa was a burnt-out wellness coach who couldn\'t even take care of herself anymore. She felt like a fraud." Pause there — let them feel it. Then show the shift: "After we helped her build calm structure around her content delivery, she started sleeping again. And her client bookings doubled because her message finally had clarity." Empathy first, outcome second.',
+            impact: 'When they feel seen before they see your solution, trust builds instantly. Wellness clients need to know you understand the whole person, not just the problem.'
+          },
+          {
+            issue: 'Your credibility story feels clinical when it should feel compassionate.',
+            fix: 'Reframe your case study through the lens of relief, not just ROI. "A yoga teacher whispered to me, \'I don\'t want to sound salesy.\' I told her: your flow sequence already guides transformation — let your webinar do the same. Warm-up (hook), peak pose (impact story), cool-down (offer integration). She tried it. Her next retreat sold out in 48 hours." That\'s structure meeting soul.',
+            impact: 'Wellness audiences respond to metaphors that honor their practice. When you show them how to stay authentic while earning, resistance melts into readiness.'
+          }
+        ],
+        'Consultant': [
+          {
+            issue: 'Consultant audiences demand diagnostic precision — but you\'re not showing the catalytic moment where your expertise illuminated the real problem.',
+            fix: 'Use STR Arc to turn proof into story. Start with the human mess: "A VP of Operations felt trapped by 40% turnover." Describe the Trigger: "We uncovered a misaligned communication culture no exit interview had surfaced." Reveal the Result: "After implementing our clarity system, churn dropped 18% in 90 days — and she finally had bandwidth to focus on growth instead of damage control." That\'s not a pitch; that\'s proof with a pulse.',
+            impact: 'Authority begins where data meets drama. Consultants who tell STR-format stories are remembered; those who just cite metrics are forgotten.'
+          },
+          {
+            issue: 'You have case studies but not stories that stick — technical credibility without narrative credibility.',
+            fix: 'Transform your best client win into a cinematic moment. Prompt: "Ask AI to summarize your top three case studies in STR format — Start, Trigger, Result — in three sentences each. The one that feels most vivid? That\'s your opening story." Then practice saying it slowly, with pauses after the Trigger. Let the weight of the problem land before you reveal the breakthrough. People remember patterns only after they remember people.',
+            impact: 'When consultants master narrative credibility, clients stop evaluating and start enrolling. One story with emotional weight beats ten bullet-point case studies.'
+          },
+          {
+            issue: 'Your proof feels transactional instead of transformational — numbers without relief.',
+            fix: 'Reframe your case study to show the human outcome alongside the business metric. "A health-systems consultant helped a clinic reclaim $1.2M in lost revenue — but the real win? The office manager finally went home at 5pm instead of drowning in billing errors." Lead with the metric, land with the meaning. That balance signals you understand both spreadsheets and stress.',
+            impact: 'Consultants who show they care about outcomes beyond the contract earn long-term partnerships. Relief + ROI = referrals.'
+          }
+        ]
+      };
+      
+      const allVariations = getNicheVariations(genericVariations, nicheSpecific);
+      const chosen = pick(allVariations);
+      fixes.push({ priority: 'HIGH', section: 'Sales Story', ...chosen });
+    }
 
-                const risks = [];
-                if (scores.stick < 70) risks.push('vanishing');
-                if (scores.coreContent < 80 || scores.stick < 70) risks.push('crickets');
-                if (scores.setStage < 70 || scores.coreContent < 85) risks.push('glazed');
-                if (scores.close < 70 || scores.transition < 60) risks.push('ghost');
+    if (scores.setStage < 70) {
+      const variations = [
+        {
+          issue: 'There\'s not enough urgency — your audience thinks they can fix this problem later, so they will.',
+          fix: 'Name the cost of waiting. Use one clear sentence to show them what happens if they don\'t act now: "If you don\'t fix this, here\'s what happens next." Paint the picture of staying stuck — not to scare them, but to help them see the real stakes. Then show them the path out.',
+          impact: 'Creates decision energy before you make the offer. Urgency isn\'t pressure — it\'s clarity about what\'s on the line.'
+        },
+        {
+          issue: 'You haven\'t shown them what staying stuck actually costs — so they\'re not motivated to move.',
+          fix: 'Get specific about what happens if they do nothing. Not generic pain, but real consequences they\'ve probably already felt: "You\'ll keep spending three hours a week on X, you\'ll miss another Y, you\'ll still be dealing with Z six months from now." Then pivot to the alternative. Make the cost of inaction vivid.',
+          impact: 'Turns "maybe later" into "I need this now." People act when they feel the weight of staying put.'
+        },
+        {
+          issue: 'They\'re nodding along but they don\'t feel the urgency — so nothing\'s going to change.',
+          fix: 'Paint the "if nothing changes" picture in two sentences. What does their next quarter look like if they keep doing what they\'re doing? Make it real, not dramatic. Then immediately show them the opposite: what shifts when they take action now. Contrast creates urgency.',
+          impact: 'Moves them from interested to invested. Urgency doesn\'t come from countdown timers — it comes from clarity on cost.'
+        },
+        {
+          issue: 'You\'re teaching the solution without first making them feel the problem — so the fix feels optional, not essential.',
+          fix: 'Before you teach anything, ground them in the reality of staying stuck. Ask: "What does this cost you every week?" or "How long have you been dealing with this?" Then name the compounding cost: "Another month of this means..." Make it tangible. Once they feel it, they\'re ready for the solution.',
+          impact: 'People don\'t buy solutions to problems they don\'t feel. Urgency starts with acknowledging what inaction actually costs them.'
+        },
+        {
+          issue: 'There\'s no emotional stake in solving this now versus later — so later always wins.',
+          fix: 'Build urgency by connecting the problem to something they care about deeply: lost time, missed opportunities, ongoing frustration. Say it plainly: "Every week you wait is another week of X." Then show them what changes when they act. The goal isn\'t fear — it\'s clarity about what\'s truly at risk.',
+          impact: 'Emotional urgency drives decisions. When they see what waiting costs them personally, "later" stops being an option.'
+        },
+        {
+          issue: 'You\'re assuming they already feel the urgency, but most of them don\'t — yet.',
+          fix: 'Make the cost of inaction explicit. Walk them through what the next 3-6 months look like if nothing changes. Be specific: "You\'ll still be doing X manually, you\'ll miss out on Y, and Z will keep eating your time." Then contrast that with what shifts when they solve it now. Let them choose.',
+          impact: 'Urgency isn\'t manipulation — it\'s helping them see the real trade-off. Once they do, they lean toward action instead of delay.'
+        }
+      ];
+      const chosen = pick(variations);
+      fixes.push({ priority: 'CRITICAL', section: 'Set the Stage', ...chosen });
+    }
 
-                const avgScore = Math.round(Object.values(scores).reduce((a, b) => a + b, 0) / 9);
+    if (scores.coreContent < 85) {
+      const genericVariations = [
+        {
+          issue: 'You\'re teaching in course mode instead of decision mode — giving them steps but not helping them believe it\'s possible.',
+          fix: 'Cut one framework or tip list. Replace it with one vivid before-and-after example that shows the transformation, not just the process. Let them see what life looks like on the other side. Your job isn\'t to teach everything — it\'s to move their belief forward so they\'re ready to say yes.',
+          impact: 'Shifts momentum from "that\'s interesting" to "I need this now." Examples build belief faster than instructions ever will.'
+        },
+        {
+          issue: 'You\'re piling on great content but it\'s not moving them toward a decision — it\'s just filling their notebook.',
+          fix: 'Trade one "how to" section for one "here\'s what happened when" story. Show them the result, the transformation, the moment it clicked for someone else. They don\'t need more steps — they need to believe the steps work. Proof beats process every time.',
+          impact: 'Content that builds belief converts. Content that just educates doesn\'t. You\'re teaching them to trust the outcome, not memorize the method.'
+        }
+      ];
+      
+      const nicheSpecific = {
+        'Leadership/Career': [
+          {
+            issue: 'You\'re teaching frameworks when your audience needs to see those frameworks in action during real leadership moments.',
+            fix: 'Design with emotional architecture — use metaphors that make results visible. Instead of explaining your leadership model, show it: "Imagine leadership as a bridge. You\'re not building it alone; you\'re guiding others to help you build it together." Then walk through how Marcus used this exact thinking to turn around a failing team in 60 days. Show the messy conversation, the pushback, the pivot. That\'s belief-building content.',
+            impact: 'Leadership audiences follow stories through fog better than they follow frameworks through slides. When they can see themselves in that moment, transformation becomes tangible.'
+          },
+          {
+            issue: 'Your content reads like a professional development course when it should feel like a leadership turning point.',
+            fix: 'Use the Struggle→Discovery→Transformation arc in your teaching. "Here\'s Sarah, stuck at director level. The struggle: brilliant work, zero visibility. The discovery: her communication style was invisible too. The transformation: after we built her executive presence framework, she got the VP role in 90 days." That structure works for case studies AND for teaching your core method. Make every major teaching point feel like a before/after moment.',
+            impact: 'When your teaching mirrors transformation, not information, attendees leave ready to act instead of ready to file notes.'
+          },
+          {
+            issue: 'You\'re over-teaching when you should be over-inspiring — they need permission to lead, not another certification.',
+            fix: 'Shift 20% of your content from "how to" to "what if." Ask questions that open possibility: "What if your next 1-on-1 felt like partnership instead of performance review?" Then show them one micro-shift they can try tomorrow. Less comprehensive, more catalytic. Your webinar should leave them thinking "I can start this Monday" not "I should take another course first."',
+            impact: 'Leaders don\'t need more information — they need more permission and one clear next step. Inspiration drives implementation.'
+          }
+        ],
+        'SaaS/Tech': [
+          {
+            issue: 'Tech audiences won\'t trust your solution until they see the closed feedback loop between marketing intent and product reality.',
+            fix: 'Show the operational workflow, not just the outcome. Walk through your stack integration: "Here\'s how we connected Zoom polling data to HubSpot lifecycle stages, then fed that into product analytics to trigger in-app prompts for high-engagement attendees." Use a visual or live demo if possible. Show them the API calls, the data flow, the automated tagging. Technical proof at this level converts skeptics into evangelists.',
+            impact: 'SaaS buyers need to see the system working, not just hear about results. One 90-second technical walkthrough builds more trust than ten case study slides.'
+          },
+          {
+            issue: 'You\'re explaining features when they need to see the revenue transformation those features unlock.',
+            fix: 'Structure your teaching around the STR Arc. Start: "Most SaaS companies see 40% attendance, 3% conversion." Trigger: "The issue? Linear delivery and generic CTAs that ignore behavioral data." Result: "When we integrated real-time engagement scoring with CRM automation, one client saw 37% conversion lift and 24-minute average watch time — up from 11." Then break down exactly how that system works. Numbers first, then the blueprint.',
+            impact: 'Technical audiences trust metrics wrapped in methodology. Show them the revenue impact, then show them how to replicate it.'
+          },
+          {
+            issue: 'Your content feels like a product demo when it should feel like a growth experiment they can run themselves.',
+            fix: 'Frame your teaching as an Activation Sprint they can deploy. "Here\'s the 14-day framework: Day 0, segment by ICP. Days 2-6, deliver micro-content aligned to product triggers. Days 8-14, execute fit-check calls. AI monitors engagement to personalize outreach timing." Give them the exact operational workflow. Make it so clear they could run it next week. That\'s how you turn a webinar into a movement.',
+            impact: 'When you operationalize insight and make it repeatable, attendees stop evaluating and start implementing. Clarity converts.'
+          }
+        ],
+        'Health & Wellness': [
+          {
+            issue: 'Wellness audiences need to feel the transformation, not just understand the steps — but you\'re teaching tactics instead of touching hearts.',
+            fix: 'Mirror the structure of a healing session in your content delivery. Think of your webinar as a class sequence: warm-up (create safety and connection), peak pose (deliver the transformation insight), cool-down (integrate the offer naturally). For example, open with: "If you\'ve been giving and giving until you\'re burnt out, you\'re not broken — you\'re just missing structure." Then guide them through one micro-practice they can use today. End with: "Here\'s how we keep going together." That flow honors their practice while moving them toward enrollment.',
+            impact: 'Health practitioners respond to structure that feels like soul, not sales. When your teaching mirrors their modality, resistance melts.'
+          },
+          {
+            issue: 'You\'re over-delivering on information and under-delivering on permission — they need to believe healing and earning can coexist.',
+            fix: 'Replace one teaching section with a transformation story that addresses their internal conflict. "Meet Dr. Leah, holistic nutrition coach. Before: overstuffed slides, zero CTAs, guilt about charging. After: AI-optimized story flow, guided Q&A, 52% conversion. Her takeaway: \'I stopped chasing algorithms and started scheduling outcomes.\'" Frame this as proof that structure = freedom, not selling out. Then teach the system that made it possible.',
+            impact: 'When wellness entrepreneurs see someone like them thrive financially without compromising values, the shame lifts and action follows.'
+          },
+          {
+            issue: 'Your content is solid but it feels clinical when it should feel compassionate — you\'re teaching to the head, not the heart.',
+            fix: 'Lead every major teaching point with emotional acknowledgment before tactical instruction. "You work in trust-based territory. Every client carries hope and fear into your space." Pause. Let that land. Then: "Here\'s how AI helps you honor that — by personalizing follow-ups with reflective pauses and trauma-sensitive language. Automation here isn\'t cold; it\'s compassion at scale." Always validate the emotional weight before offering the strategic solution.',
+            impact: 'Wellness decisions are emotional first, logical second. When you honor both in your teaching, trust deepens and enrollment feels natural.'
+          }
+        ],
+        'Consultant': [
+          {
+            issue: 'You\'re teaching methodology when you should be demonstrating diagnostic brilliance in real time.',
+            fix: 'Turn your teaching into a live case study dissection. "Let me show you how the STR Arc works. Start: A VP felt trapped by turnover. Most consultants would audit HR processes. We didn\'t. Trigger: We ran a communication culture assessment and found misalignment no exit interview surfaced. Result: Clarity system implemented, churn dropped 18% in 90 days." Then break down exactly how you structured that diagnostic. Make your teaching feel like watching a master consultant work. That\'s proof with a pulse.',
+            impact: 'Consultants who demonstrate expertise in motion — not just in theory — earn authority. Attendees think: "I want that kind of precision in my practice."'
+          },
+          {
+            issue: 'Your content has technical credibility but lacks narrative credibility — they\'re learning but not feeling compelled.',
+            fix: 'Transform your teaching using the Client Conversion Sprint structure. Show them the 14-day enrollment rhythm: Day 0, clarify the single measurable result. Day 3, deliver a mini-aha they can test instantly. Day 7, run a poll to expose blockers. Day 14, invite to Strategy Session. Walk through a real example: "A health-systems consultant used this exact sprint and helped a clinic reclaim $1.2M. But the real win? The office manager went home at 5pm instead of drowning in billing errors." Technical + human = trust.',
+            impact: 'When you teach frameworks through real client journeys, methodology becomes memorable. People remember patterns only after they remember people.'
+          },
+          {
+            issue: 'You\'re giving them the "what" but not showing them the "how it feels" when it works.',
+            fix: 'Use the STR Arc to structure every major teaching point. Start with the mess, name the catalytic moment, reveal the relief alongside the ROI. Example: "Consultant challenge — low conversion from expertise to enrollment. Trigger — realized we were telling instead of teaching through experience. Result — shifted to interactive diagnostic webinars, enrollment rate jumped from 12% to 34%." Make every framework feel like a case study that\'s still unfolding. That\'s how you turn content into conversion.',
+            impact: 'Authority begins where data meets drama. Teach through story-wrapped proof and your audience will follow you anywhere.'
+          }
+        ]
+      };
+      
+      const allVariations = getNicheVariations(genericVariations, nicheSpecific);
+      const chosen = pick(allVariations);
+      fixes.push({ priority: 'MEDIUM', section: 'Core Content', ...chosen });
+    }
 
-                const analysis = {
-                    timestamp: new Date().toLocaleString(),
-                    title: title || 'Untitled Webinar',
-                    niche: niche || 'Not specified',
-                    audience: audience || 'Not specified',
-                    scores,
-                    risks,
-                    avgScore,
-                    fixes: generateFixes(scores, niche)
-                };
+    if (scores.transition < 60) {
+      const genericVariations = [
+        {
+          issue: 'The shift to your offer feels jarring — like you just switched from teacher mode to sales mode, and it kills the momentum you built.',
+          fix: 'Seed the call-to-action early. Around the 30% mark, mention what "winning looks like next" without making the full pitch yet. Then when you transition at 60-70%, it feels natural — like the next logical step, not a surprise ask. Use phrases like "here\'s how we keep going" instead of "now let me sell you something."',
+          impact: 'Makes your offer feel like an invitation, not an interruption. The best closes don\'t feel like closes at all.'
+        }
+      ];
+      
+      const nicheSpecific = {
+        'Leadership/Career': [
+          {
+            issue: 'You\'re treating the offer like a separate pitch instead of the natural continuation of the transformation you\'ve been building.',
+            fix: 'Seed your offer using invitation language from your content: "Everything we\'ve covered today — the clarity, the courage, the confidence — that\'s just the beginning. When you\'re ready to lead at the next level, this program is your next step." Frame it as evolution, not transaction. Plant that seed around minute 20, then circle back to it naturally when you close. No surprise, just continuity.',
+            impact: 'Leadership audiences respond to invitation, not interruption. When the offer feels like the next chapter of their story, resistance drops.'
+          },
+          {
+            issue: 'Your transition feels transactional instead of transformational — you\'re asking for a sale instead of offering partnership.',
+            fix: 'Use the three-tier architecture language: "Some of you will want to implement this solo — here\'s the DIY path. Others want guidance — that\'s the cohort. And some of you are ready for full partnership — that\'s 1-on-1." Present options calmly, then pause. "Each tier adds accountability and access. Pick the one that matches where you are." That\'s service, not pressure.',
+            impact: 'When you give leaders choice framed as service levels, they self-select into the right tier. Calm clarity converts better than urgency.'
+          },
+          {
+            issue: 'You\'re making the shift to your offer without acknowledging that you understand their hesitation.',
+            fix: 'Bridge with empathy before you transition. "Some leaders freeze at the word \'investment.\' I get it. But here\'s the reframe: revenue is responsibility. It lets you keep showing up. When people invest, they implement." Then move into your offer: "Here\'s what working together looks like..." That acknowledgment disarms resistance before it builds.',
+            impact: 'Leadership clients need permission to invest in themselves. When you normalize the decision, the transition feels supportive instead of pushy.'
+          }
+        ],
+        'SaaS/Tech': [
+          {
+            issue: 'Your transition reads like a hard pivot from value to pitch — and technical audiences can smell a sales shift from a mile away.',
+            fix: 'Frame your transition as operational next steps, not an offer. "We\'ve covered the STR Arc and Activation Sprint framework. To implement this in your stack, here are three deployment options..." Then outline your tiers like a technical spec sheet: Self-Service (templates + docs), Guided Sprint (weekly check-ins), Full Integration (done-with-you implementation). Keep the tone clinical and consultative. That\'s how SaaS buyers want to hear offers.',
+            impact: 'When your transition sounds like project scoping instead of selling, technical buyers stay engaged. They\'re evaluating fit, not resisting pressure.'
+          },
+          {
+            issue: 'You\'re presenting your offer as a product when it should sound like a partnership in their growth experiment.',
+            fix: 'Transition using language from the Activation Sprint model: "Everything we covered today becomes repeatable when you operationalize it. Next step: run your first 14-day sprint with us. We\'ll help you deploy the templates, integrate your CRM, and capture baseline metrics within two weeks." Frame it as the logical execution phase of what you just taught. That continuity removes friction.',
+            impact: 'SaaS audiences expect clear next steps. When your offer feels like sprint planning instead of a sales pitch, conversion rates climb.'
+          },
+          {
+            issue: 'Your offer shows up too late in the sequence — by the time you pitch, technical audiences have already mentally moved on.',
+            fix: 'Seed your CTA early using foreshadowing: "At the end of this session, I\'ll share how you can deploy this exact system in your environment — with or without our help." Then at 60%, transition naturally: "Here\'s what implementation looks like..." Give them three clear paths and let them choose. Early signaling + calm execution = higher conversion with technical buyers.',
+            impact: 'Technical audiences appreciate transparency. When they know the offer is coming and it\'s framed as options, not obligations, they lean in instead of checking out.'
+          }
+        ],
+        'Health & Wellness': [
+          {
+            issue: 'Your transition feels like you\'re abandoning the healing space you created and jumping into commerce — it breaks trust.',
+            fix: 'Use the class sequence metaphor to bridge naturally. "We\'ve moved through the warm-up, hit our peak insight, and now it\'s time for integration. Here\'s how we keep this work alive beyond today..." Frame your offer as the cool-down phase — the natural continuation of care. "This program is how we stay connected so the transformation you felt today becomes the life you live tomorrow." That\'s structure meeting soul.',
+            impact: 'Wellness audiences need the offer to feel like continued care, not a commercial break. When the transition honors the emotional journey, enrollment follows naturally.'
+          },
+          {
+            issue: 'You\'re asking them to invest without addressing the "I don\'t want to sound salesy" fear that\'s probably running through their minds.',
+            fix: 'Disarm the objection before you transition. "If you\'re feeling a little tension right now — like, \'Wait, is this where the pitch comes?\' — I hear you. Here\'s the truth: sales is just structured service. When I offer you this program, I\'m not selling out. I\'m making sure the people who need this work can access it." Then present your offer with that permission already granted. Frame it as responsibility, not greed.',
+            impact: 'When you normalize the discomfort and reframe money as mission fuel, wellness entrepreneurs stop resisting and start enrolling.'
+          },
+          {
+            issue: 'Your transition is clinical when it should be compassionate — you\'re listing features instead of inviting continued healing.',
+            fix: 'Shift your language from transactional to relational. Instead of "Here are the program details," try: "If what we explored today resonated, here\'s how we go deeper together. This isn\'t about another course — it\'s about having a guide while you implement what your heart already knows is true." Then outline your tiers as levels of support, not pricing packages. Make it feel like partnership.',
+            impact: 'Wellness clients respond to invitations that honor their journey. When your transition feels like extending a healing hand, not pushing a product, trust deepens.'
+          }
+        ],
+        'Consultant': [
+          {
+            issue: 'You\'re transitioning to your offer without establishing that this is the natural next step for serious professionals.',
+            fix: 'Use calm authority language from your scripts: "You now have the STR Arc framework, the Sprint model, and proof it works. The consultants who rise fastest are the ones who implement with precision, not perfection. Here\'s what partnership looks like..." Then pause. Let the silence signal confidence. "If this approach aligns with your growth goals, let\'s map what it could look like inside your practice." That\'s invitation, not pitch.',
+            impact: 'Authority is calm. When you transition with certainty and give space for decision, high-caliber consultants lean in. Sales happen in the stillness after clarity.'
+          },
+          {
+            issue: 'Your offer feels bolted-on instead of integrated — like you taught one thing and are now selling something else.',
+            fix: 'Bridge using the Client Conversion Sprint structure you taught. "Everything we covered today — STR Arc, 14-day enrollment flow, AI integration — becomes your operating system when you implement it with accountability. Here are three ways to work together: DIY with templates, Guided with monthly strategy calls, or Immersive with full practice integration." Present it like consulting tiers, not product packages. Calm, clear, consultative.',
+            impact: 'Consultants expect strategic options, not hard sells. When your transition mirrors the frameworks you taught, it feels like the logical execution phase.'
+          },
+          {
+            issue: 'You\'re making the ask without showing them what diagnostic precision looks like in your enrollment process.',
+            fix: 'Transition by demonstrating your methodology in real time. "Before we talk next steps, let me show you how I structure enrollment. It\'s not a sales call — it\'s a Strategy Session where we diagnose fit. I ask three questions: Where are you now? Where do you want to be in 90 days? What\'s blocking that path? Then we map whether partnership makes sense." That transparency builds trust. Then: "If you\'d like that session, here\'s how to book it." You just showed them your process by using your process.',
+            impact: 'When consultants see your enrollment process is as sharp as your teaching, credibility skyrockets. They think: "I want that level of precision in my practice."'
+          }
+        ]
+      };
+      
+      const allVariations = getNicheVariations(genericVariations, nicheSpecific);
+      const chosen = pick(allVariations);
+      fixes.push({ priority: 'CRITICAL', section: 'Transition', ...chosen });
+    }
 
-                setAnalysisData(analysis);
-                setActiveTab('results');
-                setHistory(prev => [analysis, ...prev.slice(0, 9)]);
-            };
+    if (scores.close < 70) {
+      const genericVariations = [
+        {
+          issue: 'Your offer is coming too late or feels like an afterthought — by the time you ask, energy has dropped and decision fatigue has set in.',
+          fix: 'Make the ask at the 60-70% mark while energy is still high. Give them one clear path forward, one deadline to act, and one piece of risk-reversal (a guarantee, a bonus, or a fast-action win). Keep it simple. Confusion kills conversions, so don\'t muddy the water with multiple options or vague next steps.',
+          impact: 'Converts while belief and momentum are peaking. Timing matters as much as the offer itself.'
+        }
+      ];
+      
+      const nicheSpecific = {
+        'Leadership/Career': [
+          {
+            issue: 'Your close sounds like you\'re asking for permission instead of offering partnership — leadership audiences need confident invitation.',
+            fix: 'Use the "invite, don\'t chase" language from your framework. Say this calmly: "When you\'re ready to lead at the next level, this program is your next step. We\'ll work together on your executive presence, your team dynamics, and the clarity system that turns overwhelm into impact." Then present your three-tier offer architecture: DIY, Guided, Immersive. Explain each tier in two sentences. Then stop talking. Silence signals confidence.',
+            impact: 'Leaders follow leaders. When you close with calm authority instead of urgency, decision-makers lean in. Your certainty becomes their permission.'
+          },
+          {
+            issue: 'You\'re listing program features when you should be painting the transformation on the other side.',
+            fix: 'Close by connecting back to their Spark — the moment they realized leadership was about purpose, not position. "Everything we covered today — the clarity, the systems, the stories — that\'s how you go from managing tasks to leading transformation. This program is designed to give you exactly that." Then offer your tiers as levels of partnership: "DIY gives you the frameworks. Guided adds accountability. Immersive means full support." Present options, then pause. Let them choose.',
+            impact: 'When your close mirrors the emotional journey you built in your content, it feels like the natural culmination, not a sales pitch.'
+          },
+          {
+            issue: 'Your close is rushed or unclear — like you ran out of time and squeezed it in at the end.',
+            fix: 'Plan your close for minute 35-40 of a 50-minute session. When you get there, slow down. "Let me show you what working together looks like." Then use the Offer Architecture framework: name each tier, explain what they get, state the investment. Example: "Leadership Foundations: self-paced, $497. Executive Cohort: monthly group strategy, $1,997. Private Partnership: 1-on-1 for 90 days, $7,500." Clear, calm, complete. Then: "Questions? Book a call. Ready? Here\'s the link." That\'s authority.',
+            impact: 'A clear, well-timed close converts. A rushed close feels like an afterthought and performs like one too.'
+          }
+        ],
+        'SaaS/Tech': [
+          {
+            issue: 'Your close reads like a product pitch when it should sound like a deployment plan.',
+            fix: 'Frame your close operationally using the Activation Sprint language. "To implement this system in your environment, here are your three deployment options: Self-Service — templates, scripts, and documentation for $997. Guided Sprint — weekly implementation calls for 14 days, $3,500. Full Integration — done-with-you setup including CRM connection and AI automation, $12,500." Then add the next-step CTA: "Deploy the provided templates, run your first sprint, and capture baseline metrics within 14 days." That\'s execution language, not sales language.',
+            impact: 'Technical buyers evaluate ROI, not relationships. When your close sounds like project scoping, conversion rates climb because it feels like the logical next phase.'
+          },
+          {
+            issue: 'You\'re presenting your offer as a course when SaaS buyers want a growth experiment they can run.',
+            fix: 'Close using metrics and outcomes from your case study. "Remember the mid-market PM platform we discussed? 37% conversion lift, 24-minute engagement. That system is now a repeatable framework. Here\'s how you deploy it: Option 1 — DIY with our automation scripts and CRM templates. Option 2 — Guided with bi-weekly strategy sessions. Option 3 — Full-service integration where we build it in your stack." Frame it as buying access to a proven growth lever, not a training program.',
+            impact: 'When you position your offer as a replicable system with measurable outcomes, SaaS leaders stop evaluating and start implementing.'
+          },
+          {
+            issue: 'Your close lacks urgency and specificity — technical audiences need clear next actions and deadlines.',
+            fix: 'State the operational timeline clearly: "We onboard new clients on the 1st and 15th of each month. Next sprint starts November 1st. If you want in, book your fit-check call by October 28th." Give them the exact path: "Click the link, schedule 20 minutes, we\'ll diagnose fit and map your first sprint." No ambiguity. Technical buyers appreciate precision. Then add one risk-reversal: "If after 14 days you don\'t see measurable improvement in engagement metrics, full refund." That removes hesitation.',
+            impact: 'SaaS buyers respect deadlines and guarantees. When you remove both time ambiguity and financial risk, conversion accelerates.'
+          }
+        ],
+        'Health & Wellness': [
+          {
+            issue: 'Your close feels transactional when it should feel like an extension of the healing relationship you just built.',
+            fix: 'Use the permission language from your script: "If what we explored today resonated — if you felt that shift from overwhelm to clarity — here\'s how we keep this work alive. This isn\'t another program you start and abandon. It\'s structured support so the transformation you felt today becomes your new normal." Then present your tiers as levels of care: "Foundation (self-guided), Circle (group support), Partnership (1-on-1)." Frame it as continued care, not a product purchase.',
+            impact: 'When your close honors the emotional journey and frames investment as self-care, wellness entrepreneurs stop resisting and start enrolling.'
+          },
+          {
+            issue: 'You\'re asking them to invest without acknowledging the money guilt many wellness practitioners carry.',
+            fix: 'Disarm the objection in your close. "Some of you might be thinking, \'Can I really charge for this?\' Here\'s the truth: revenue is responsibility. It lets you keep showing up for the people who need you most. This program costs $1,500 because it includes 12 weeks of support, accountability, and a community that gets it. When you invest, you implement." Say it calmly, with certainty. Then present your offer. That reframe opens the door.',
+            impact: 'Wellness audiences need permission to earn. When you normalize investment as an act of commitment (not greed), enrollment follows naturally.'
+          },
+          {
+            issue: 'Your close is clinical when it should be compassionate — you\'re listing logistics instead of inviting partnership.',
+            fix: 'Close with the language from Dr. Leah\'s story: "You don\'t need another course. You need calm structure around your gifts so you can stop chasing algorithms and start scheduling outcomes. That\'s what this program gives you: structure = freedom. Here are three ways we can work together..." Then outline your tiers in relational language, not pricing tiers. "Self-Guided Path, Supported Circle, Private Partnership." End with: "Pick the one that matches where your heart is ready to go." That\'s soul meeting strategy.',
+            impact: 'When your close feels like continued healing instead of a sales transaction, wellness clients say yes from a place of alignment, not obligation.'
+          }
+        ],
+        'Consultant': [
+          {
+            issue: 'Your close lacks the calm authority consultants need to project — it sounds like you\'re hoping they\'ll say yes instead of knowing they should.',
+            fix: 'Use the signature close from your script. Say this slowly: "If this approach aligns with your goals, let\'s map what it could look like inside your practice." Then pause. Let the silence signal confidence. Don\'t fill it with nervous talking. After the pause: "Here\'s how partnership works: Strategy Session to diagnose fit, then we choose Sprint (14 days), Build (90 days), or Embed (ongoing advisory)." State it calmly, like you\'re describing a proven process — because you are. Authority is calm. Sales happen in the stillness after certainty.',
+            impact: 'High-caliber consultants respond to confidence, not urgency. When your close radiates calm authority, they see you as a peer worth partnering with.'
+          },
+          {
+            issue: 'You\'re presenting your offer like a menu instead of a strategic partnership tailored to their practice.',
+            fix: 'Frame your close as collaborative next steps. "You now have the STR Arc, the Client Conversion Sprint, and proof it works at scale. The consultants who implement this fastest are the ones who do it with accountability and precision. Here are three partnership models: Templates + Training (self-led), Guided Sprints (monthly strategy calls), Full Integration (we build it with you)." Then add: "Which model fits your practice depends on where you are and where you\'re going. Let\'s diagnose that together." That\'s consultative closing.',
+            impact: 'When you position your offer as strategic partnership instead of product purchase, consultant-level clients lean in. They\'re buying precision, not promises.'
+          },
+          {
+            issue: 'Your close doesn\'t demonstrate the diagnostic brilliance you just taught — it\'s generic when it should be sharp.',
+            fix: 'Close by showing your methodology in action. "Before we talk next steps, here\'s how I structure enrollment. It\'s not a sales call — it\'s a 20-minute Strategy Session. I ask three diagnostic questions: Where are you now in building your practice? Where do you want to be in 90 days? What\'s blocking that path? Then we map whether partnership makes sense — and if it does, which model fits." You just sold by demonstrating precision. Then: "Book that session using this link. Spots fill quickly because I only take 10 new clients per quarter." Scarcity + process = authority.',
+            impact: 'When consultants see your enrollment process is as sharp as your teaching, credibility skyrockets. They think: "I want that level of precision." And they book.'
+          }
+        ]
+      };
+      
+      const allVariations = getNicheVariations(genericVariations, nicheSpecific);
+      const chosen = pick(allVariations);
+      fixes.push({ priority: 'CRITICAL', section: 'The Close', ...chosen });
+    }
 
-            const generateFixes = (scores, selectedNiche) => {
-                const fixes = [];
-                const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
-                
-                if (scores.introduction < 70) {
-                    fixes.push({
-                        priority: 'HIGH',
-                        section: 'Introduction',
-                        issue: 'Your hook isn\'t landing — attendees won\'t know why they\'re here.',
-                        fix: 'Start with one clear sentence that names their goal. Follow with a promise they can picture: "In 45 minutes, you\'ll walk away with X." Keep it tight — 10 words or less.',
-                        impact: 'Stops tab-hopping in the first 90 seconds. When they know what\'s in it for them, they lean in.'
-                    });
-                }
+    if (scores.layering < 70) {
+      const variations = [
+        {
+          issue: 'Your offer feels thin because it\'s missing the bonuses, guarantees, or fast-action incentives that remove final objections.',
+          fix: 'Add one fast-action bonus or a clear money-back guarantee. Frame it as risk-reversal, not a bribe — you\'re making it easier for them to say yes by removing what\'s holding them back. A bonus that solves a related pain point or a guarantee that proves your confidence will tip fence-sitters into action.',
+          impact: 'Removes the last layer of hesitation. Often it\'s not your main offer they doubt — it\'s the risk of making the wrong call.'
+        },
+        {
+          issue: 'There\'s nothing to tip the fence-sitters — no bonus, no guarantee, no "act now" incentive.',
+          fix: 'Layer in one piece of risk-reversal. Either a fast-action bonus (something they can use immediately) or a guarantee that takes the fear out of saying yes. Don\'t stack ten bonuses — pick one that matters and frame it clearly: "Here\'s what makes this a no-brainer."',
+          impact: 'The last 10-15% of buyers need that final nudge. A well-placed bonus or guarantee is often the difference between "maybe" and "yes."'
+        },
+        {
+          issue: 'Your core offer is strong but there\'s no safety net or urgency driver.',
+          fix: 'Add one element that removes friction: either a guarantee that proves you stand behind it, or a time-sensitive bonus that rewards fast action. Keep it simple — you\'re not bribing them, you\'re clearing the last obstacle between them and the decision.',
+          impact: 'Closes the gap for people who are 90% there but need one more reason to move. Risk-reversal converts the "almost" into "yes."'
+        },
+        {
+          issue: 'You\'re asking for the sale without giving them a reason to act today versus next week.',
+          fix: 'Add urgency through a deadline-driven bonus or guarantee. Make it real: "Sign up by midnight and get X" or "This comes with a 30-day guarantee so there\'s zero risk to starting now." Give them a reason to choose today, not "maybe later."',
+          impact: 'Without urgency, later always wins. A time-bound bonus or clear guarantee creates the reason to act now instead of thinking about it.'
+        },
+        {
+          issue: 'The offer stands alone with no sweetener or safety net — which leaves money on the table.',
+          fix: 'Pick one addition: either a fast-action bonus that adds instant value, or a guarantee that removes the risk of regret. Don\'t overthink it. One well-positioned extra can convert 15-20% more fence-sitters. Frame it as "here\'s why this is easy to say yes to right now."',
+          impact: 'Most people need one more reason to act. A bonus rewards decisiveness; a guarantee removes fear. Either one tips undecided buyers over the edge.'
+        },
+        {
+          issue: 'You\'re relying on the core offer alone, which means everyone who\'s 95% ready will wait to decide.',
+          fix: 'Add one layer of "yes insurance" — either a results guarantee or a time-sensitive bonus. Make it relevant and real. Not "sign up and get 47 bonuses," but "act today and I\'ll add this one thing that solves your immediate next challenge." Quality over quantity.',
+          impact: 'One strong incentive beats five weak ones. The right bonus or guarantee removes the last bit of doubt and converts hesitation into action.'
+        }
+      ];
+      const chosen = pick(variations);
+      fixes.push({ priority: 'LOW', section: 'Layering', ...chosen });
+    }
 
-                if (scores.stick < 70) {
-                    fixes.push({
-                        priority: 'CRITICAL',
-                        section: 'Stick Strategies',
-                        issue: 'No reason to stay — half will bounce by minute 12.',
-                        fix: 'Add a "stay promise" in paragraph one: tell them the one thing they\'ll walk away with today. Then remind them every 8-10 minutes.',
-                        impact: 'Cuts early drop-off by 40%+. People stay when they trust you\'ll deliver.'
-                    });
-                }
+    if (scores.prepWork < 70) {
+      const variations = [
+        {
+          issue: 'You\'re starting with a cold audience because there\'s no pre-webinar engagement — they don\'t know you yet and haven\'t invested any energy before show day.',
+          fix: 'Send a 2-question survey or a quick micro-win before the event. Ask them what their biggest challenge is, or send a short video or PDF that delivers immediate value. This warms them up and gets them mentally committed before they ever hit "join." Pre-event engagement builds momentum, not just attendance.',
+          impact: 'Increases show-up rate and engagement from minute one. Warm audiences convert at 2-3x the rate of cold ones.'
+        },
+        {
+          issue: 'They\'re showing up cold with no pre-event connection to you or the topic.',
+          fix: 'Send something before the webinar that gets them thinking and invested. A two-question survey ("What\'s your biggest struggle with X?" and "What would success look like?") or a quick-win PDF. The goal is tiny momentum — get them leaning in before they join so they arrive ready, not skeptical.',
+          impact: 'Pre-engagement turns registrants into participants. A warm audience shows up, stays longer, and converts higher.'
+        },
+        {
+          issue: 'You\'re hoping people show up engaged, but you haven\'t done anything to warm them up first.',
+          fix: 'Add one pre-webinar touchpoint: either a quick survey that asks about their biggest challenge, or a short video/checklist that delivers immediate value. The goal isn\'t to teach them everything — it\'s to get them invested before show day. Small commitment builds bigger commitment.',
+          impact: 'Pre-event engagement boosts show-up rates by 20-30% and doubles engagement once they\'re live. Cold audiences are passive; warm ones participate.'
+        },
+        {
+          issue: 'Registrants are showing up with zero context or connection — so they start skeptical.',
+          fix: 'Send a pre-webinar email with one question: "What\'s your biggest challenge with X right now?" or share a 3-minute video that gives them one quick win related to your topic. You\'re not trying to teach the webinar early — you\'re building curiosity and investment before they join.',
+          impact: 'When people answer a question or consume pre-content, they show up warmer. Warm audiences stay longer, engage more, and buy at higher rates.'
+        },
+        {
+          issue: 'There\'s no bridge between registration and the live event — they register and then forget about you until the reminder.',
+          fix: 'Create one meaningful touchpoint between signup and showtime. Send a quick survey, a one-page checklist, or a short "here\'s what to expect" video. Make them think about their challenge or goal before they arrive. Pre-work primes them for action.',
+          impact: 'Pre-event momentum increases show-up rates and engagement. People who invest time before the webinar are more likely to invest money during it.'
+        },
+        {
+          issue: 'You\'re treating registration as the finish line when it should be the starting line.',
+          fix: 'Follow up registration with something valuable: a survey that asks about their specific challenge, or a PDF/video that gives them a quick win. The goal is to move them from "I registered" to "I\'m already getting value." That shift changes how they show up — engaged, not passive.',
+          impact: 'The space between registration and attendance is where you either lose people or lock them in. One good pre-touch can double your conversion rate.'
+        }
+      ];
+      const chosen = pick(variations);
+      fixes.push({ priority: 'MEDIUM', section: 'Prep Work', ...chosen });
+    }
 
-                if (scores.salesStory < 70) {
-                    let fix = {
-                        priority: 'HIGH',
-                        section: 'Sales Story',
-                        issue: 'Missing credibility bridge — they don\'t trust you yet.',
-                        fix: 'Share one 30-second story about someone you helped. Who they were, what changed, why it matters now.',
-                        impact: 'Builds trust before the sale. Stories create belief faster than credentials.'
-                    };
-                    
-                    if (selectedNiche === 'SaaS/Tech') {
-                        fix.fix = 'Use STR Arc: Start with the mess, surface the Trigger, reveal Result with metrics. "Company X lost 80% of users. We fixed onboarding. Conversion jumped 37%."';
-                    } else if (selectedNiche === 'Health & Wellness') {
-                        fix.fix = 'Lead with permission: "Sales is structured service." Share Dr. Leah\'s story: 52% conversion after optimizing her flow.';
-                    } else if (selectedNiche === 'Leadership/Career') {
-                        fix.fix = 'Use Struggle→Discovery→Transformation. "Sarah, stuck at director level. Discovery: invisible communication. Transformation: VP in 90 days."';
-                    } else if (selectedNiche === 'Consultant') {
-                        fix.fix = 'Use STR Arc: "VP trapped by 40% turnover. We found misaligned culture. Churn dropped 18% in 90 days." Proof with pulse.';
-                    }
-                    fixes.push(fix);
-                }
+    return fixes.sort((a, b) => {
+      const priority = { CRITICAL: 0, HIGH: 1, MEDIUM: 2, LOW: 3 };
+      return priority[a.priority] - priority[b.priority];
+    });
+  };
 
-                if (scores.setStage < 70) {
-                    fixes.push({
-                        priority: 'CRITICAL',
-                        section: 'Set the Stage',
-                        issue: 'Not enough urgency — they think they can fix this later.',
-                        fix: 'Name the cost of waiting: "If you don\'t fix this, here\'s what happens next." Paint staying stuck. Show the stakes.',
-                        impact: 'Creates decision energy. Urgency isn\'t pressure — it\'s clarity on what\'s at stake.'
-                    });
-                }
+  const analyzeOutline = () => {
+    const text = outline.toLowerCase();
+    
+    // Niche-specific scoring weights and thresholds
+    const nicheWeights = {
+      'Leadership/Career': {
+        salesStory: 1.2, // Credibility matters more
+        setStage: 1.1,
+        introduction: 1.0,
+        stick: 1.0,
+        coreContent: 1.0,
+        transition: 1.0,
+        close: 1.0,
+        layering: 1.0,
+        prepWork: 1.0
+      },
+      'SaaS/Tech': {
+        coreContent: 1.3, // Proof/demos critical
+        transition: 1.1,
+        close: 1.1,
+        introduction: 1.0,
+        stick: 1.0,
+        salesStory: 0.9,
+        setStage: 1.0,
+        layering: 1.0,
+        prepWork: 1.0
+      },
+      'Health & Wellness': {
+        setStage: 1.3, // Emotional urgency key
+        salesStory: 1.2, // Trust-building critical
+        stick: 1.1,
+        introduction: 1.0,
+        coreContent: 1.0,
+        transition: 1.0,
+        close: 1.0,
+        layering: 1.0,
+        prepWork: 1.1
+      },
+      'Consultant': {
+        salesStory: 1.25, // Authority and credibility paramount
+        close: 1.2, // Clear ROI positioning critical
+        transition: 1.15, // Smooth from value to offer
+        introduction: 1.0,
+        stick: 1.0,
+        setStage: 1.1,
+        coreContent: 1.0,
+        layering: 1.0,
+        prepWork: 1.0
+      },
+      'default': {
+        introduction: 1.0,
+        stick: 1.0,
+        salesStory: 1.0,
+        setStage: 1.0,
+        coreContent: 1.0,
+        transition: 1.0,
+        close: 1.0,
+        layering: 1.0,
+        prepWork: 1.0
+      }
+    };
+    
+    const weights = nicheWeights[niche] || nicheWeights['default'];
+    
+    // Base scores
+    const baseScores = {
+      introduction: text.includes('intro') || text.includes('welcome') || text.includes('hook') ? 85 : 45,
+      stick: text.includes('stick') || text.includes('stay') || text.includes('why') ? 75 : 40,
+      salesStory: text.includes('story') || text.includes('credibility') || text.includes('who i am') ? 80 : 35,
+      setStage: text.includes('problem') || text.includes('pain') || text.includes('urgency') ? 90 : 50,
+      coreContent: text.includes('teach') || text.includes('framework') || text.includes('step') || text.includes('content') ? 95 : 60,
+      transition: text.includes('transition') || text.includes('next') || text.includes('invite') ? 70 : 30,
+      close: text.includes('offer') || text.includes('cta') || text.includes('buy') || text.includes('purchase') ? 85 : 25,
+      layering: text.includes('bonus') || text.includes('guarantee') || text.includes('risk') ? 65 : 35,
+      prepWork: text.includes('prep') || text.includes('survey') || text.includes('before') ? 60 : 40
+    };
+    
+    // Apply niche-specific weights
+    const scores = {
+      introduction: Math.min(100, Math.round(baseScores.introduction * weights.introduction)),
+      stick: Math.min(100, Math.round(baseScores.stick * weights.stick)),
+      salesStory: Math.min(100, Math.round(baseScores.salesStory * weights.salesStory)),
+      setStage: Math.min(100, Math.round(baseScores.setStage * weights.setStage)),
+      coreContent: Math.min(100, Math.round(baseScores.coreContent * weights.coreContent)),
+      transition: Math.min(100, Math.round(baseScores.transition * weights.transition)),
+      close: Math.min(100, Math.round(baseScores.close * weights.close)),
+      layering: Math.min(100, Math.round(baseScores.layering * weights.layering)),
+      prepWork: Math.min(100, Math.round(baseScores.prepWork * weights.prepWork))
+    };
 
-                if (scores.coreContent < 85) {
-                    fixes.push({
-                        priority: 'MEDIUM',
-                        section: 'Core Content',
-                        issue: 'Teaching in course mode, not decision mode.',
-                        fix: 'Cut one framework. Replace with vivid before-and-after showing transformation, not just process. Show life on the other side.',
-                        impact: 'Shifts from "interesting" to "I need this now." Examples build belief faster than instructions.'
-                    });
-                }
+    // Detect Core Four risks
+    const risks = [];
+    if (scores.stick < 70) risks.push('vanishing');
+    if (scores.coreContent < 80 || scores.stick < 70) risks.push('crickets');
+    if (scores.setStage < 70 || scores.coreContent < 85) risks.push('glazed');
+    if (scores.close < 70 || scores.transition < 60) risks.push('ghost');
 
-                if (scores.transition < 60) {
-                    let fix = {
-                        priority: 'CRITICAL',
-                        section: 'Transition',
-                        issue: 'Jarring shift to offer — kills momentum you built.',
-                        fix: 'Seed the CTA early. At 30%, mention "what winning looks like next." At 60-70%, it feels natural. Use "here\'s how we keep going."',
-                        impact: 'Makes offer feel like invitation, not interruption. Best closes don\'t feel like closes.'
-                    };
-                    
-                    if (selectedNiche === 'Leadership/Career') {
-                        fix.fix = 'Use "invite, don\'t chase." Say: "When you\'re ready to lead at the next level, this is your next step." Then present three tiers: DIY, Guided, Immersive.';
-                    } else if (selectedNiche === 'Consultant') {
-                        fix.fix = 'Say slowly: "If this aligns with your goals, let\'s map what it looks like in your practice." Pause. Silence signals confidence.';
-                    }
-                    fixes.push(fix);
-                }
+    const avgScore = Math.round(Object.values(scores).reduce((a, b) => a + b, 0) / 9);
 
-                if (scores.close < 70) {
-                    let fix = {
-                        priority: 'CRITICAL',
-                        section: 'The Close',
-                        issue: 'Offer comes too late or feels like afterthought.',
-                        fix: 'Make the ask at 60-70% while energy is high. One clear path, one deadline, one risk-reversal (bonus or guarantee).',
-                        impact: 'Converts while belief peaks. Timing matters as much as the offer itself.'
-                    };
-                    
-                    if (selectedNiche === 'SaaS/Tech') {
-                        fix.fix = 'Frame operationally: "Deploy templates, run first sprint, capture baseline metrics within 14 days." Make it sound like project scoping.';
-                    } else if (selectedNiche === 'Health & Wellness') {
-                        fix.fix = 'Frame as continued care: "This isn\'t another course. It\'s structured support so today\'s transformation becomes your new normal."';
-                    }
-                    fixes.push(fix);
-                }
+    const analysis = {
+      timestamp: new Date().toLocaleString(),
+      title: title || 'Untitled Webinar',
+      niche: niche || 'Not specified',
+      audience: audience || 'Not specified',
+      scores,
+      risks,
+      avgScore,
+      fixes: generateFixes(scores, risks, niche, audience)
+    };
 
-                if (scores.layering < 70) {
-                    fixes.push({
-                        priority: 'LOW',
-                        section: 'Layering',
-                        issue: 'Offer feels thin — missing bonuses or guarantees.',
-                        fix: 'Add one fast-action bonus or money-back guarantee. Frame as risk-reversal, not bribe.',
-                        impact: 'Removes last hesitation. Often they don\'t doubt the offer — they doubt the risk.'
-                    });
-                }
+    setAnalysisData(analysis);
+    setActiveTab('results');
+    setHistory(prev => [analysis, ...prev.slice(0, 9)]);
+  };
 
-                if (scores.prepWork < 70) {
-                    fixes.push({
-                        priority: 'MEDIUM',
-                        section: 'Prep Work',
-                        issue: 'Starting with cold audience — no pre-engagement.',
-                        fix: 'Send 2-question survey or quick micro-win before event. Warm them up before they join.',
-                        impact: 'Increases show-up and engagement. Warm audiences convert at 2-3x cold ones.'
-                    });
-                }
-
-                return fixes.sort((a, b) => {
-                    const priority = { CRITICAL: 0, HIGH: 1, MEDIUM: 2, LOW: 3 };
-                    return priority[a.priority] - priority[b.priority];
-                });
-            };
-
-            const downloadReport = (format) => {
-                if (!analysisData) return;
-                
-                const content = `WEBGENIE FIX-IT REPORT
+  const downloadReport = (format) => {
+    if (!analysisData) {
+      console.log('No analysis data available');
+      return;
+    }
+    
+    console.log('Download triggered for format:', format);
+    
+    const content = `WEBGENIE FIX-IT REPORT
 ${analysisData.title}
 Generated: ${analysisData.timestamp}
 Niche: ${analysisData.niche}
@@ -328,12 +763,18 @@ Audience: ${analysisData.audience}
 OVERALL SCORE: ${analysisData.avgScore}/100
 
 SECTION SCORES:
-${Object.entries(analysisData.scores).map(([key, score]) => 
-    `${sectionLabels[key]}: ${score}/100`
-).join('\n')}
+Introduction: ${analysisData.scores.introduction}/100
+Stick Strategies: ${analysisData.scores.stick}/100
+Sales Story: ${analysisData.scores.salesStory}/100
+Set the Stage: ${analysisData.scores.setStage}/100
+Core Content: ${analysisData.scores.coreContent}/100
+Transition: ${analysisData.scores.transition}/100
+The Close: ${analysisData.scores.close}/100
+Layering: ${analysisData.scores.layering}/100
+Prep Work: ${analysisData.scores.prepWork}/100
 
-CORE FOUR RISKS:
-${analysisData.risks.length > 0 ? analysisData.risks.map(r => `• ${getRiskInfo(r).name}`).join('\n') : '• None detected!'}
+CORE FOUR RISKS DETECTED:
+${analysisData.risks.length > 0 ? analysisData.risks.map(r => `• ${getRiskInfo(r).name}`).join('\n') : '• None detected — you\'re clear!'}
 
 PRIORITIZED FIXES:
 ${analysisData.fixes.map((fix, i) => `
@@ -345,232 +786,504 @@ Impact: ${fix.impact}
 
 ---
 © The Webinar Authority
-Built by AgenticWebinars.ai`;
+Built by AgenticWebinars.ai
+`;
 
-                const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = `webgenie-report-${analysisData.title.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.txt`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(url);
-            };
+    try {
+      if (format === 'pdf') {
+        console.log('Creating HTML report for PDF...');
+        const htmlContent = `<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>WebGenie Fix-It Report - ${analysisData.title}</title>
+    <style>
+      body { 
+        font-family: Arial, sans-serif; 
+        padding: 40px; 
+        line-height: 1.6; 
+        max-width: 800px; 
+        margin: 0 auto; 
+        background: white;
+      }
+      h1 { 
+        color: #6a0dad; 
+        border-bottom: 3px solid #f1c40f; 
+        padding-bottom: 10px; 
+      }
+      h2 { 
+        color: #6a0dad; 
+        margin-top: 30px; 
+      }
+      .score { 
+        font-size: 48px; 
+        font-weight: bold; 
+        color: #6a0dad; 
+        text-align: center; 
+        margin: 20px 0; 
+        padding: 20px;
+        background: #f9f9f9;
+        border-radius: 10px;
+      }
+      .risk { 
+        background: #fee; 
+        padding: 15px; 
+        margin: 10px 0; 
+        border-left: 4px solid #c00; 
+        border-radius: 4px;
+      }
+      .fix { 
+        margin: 20px 0; 
+        padding: 15px; 
+        border-left: 4px solid #6a0dad; 
+        background: #f9f9f9; 
+        border-radius: 4px;
+      }
+      .priority { 
+        display: inline-block; 
+        padding: 4px 8px; 
+        border-radius: 4px; 
+        font-size: 12px; 
+        font-weight: bold; 
+        margin-bottom: 8px; 
+      }
+      .critical { background: #fee; color: #c00; }
+      .high { background: #ffecd1; color: #d97706; }
+      .medium { background: #fef9c3; color: #ca8a04; }
+      .low { background: #f3f4f6; color: #6b7280; }
+      .score-item {
+        padding: 10px;
+        background: #f9f9f9;
+        margin: 5px 0;
+        border-radius: 4px;
+        display: flex;
+        justify-content: space-between;
+      }
+      .footer {
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 2px solid #e5e7eb;
+        text-align: center;
+        color: #666;
+      }
+      .print-button {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 12px 24px;
+        background: #6a0dad;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        z-index: 1000;
+      }
+      .print-button:hover {
+        background: #5a0c9d;
+      }
+      @media print {
+        .print-button { display: none; }
+        body { padding: 20px; }
+      }
+    </style>
+  </head>
+  <body>
+    <button class="print-button" onclick="window.print()">Print / Save as PDF</button>
+    
+    <h1>WebGenie Fix-It Report</h1>
+    <p><strong>${analysisData.title}</strong></p>
+    <p>Generated: ${analysisData.timestamp}</p>
+    <p>Niche: ${analysisData.niche} | Audience: ${analysisData.audience}</p>
+    
+    <div class="score">${analysisData.avgScore}/100<br/><small style="font-size: 16px; color: #666;">Overall Score</small></div>
+    
+    <h2>Section Scores</h2>
+    ${Object.entries(analysisData.scores).map(([key, score]) => 
+      `<div class="score-item"><strong>${sectionLabels[key]}</strong><span>${score}/100</span></div>`
+    ).join('')}
+    
+    <h2>Core Four Risks Detected</h2>
+    ${analysisData.risks.length > 0 
+      ? analysisData.risks.map(r => `<div class="risk"><strong>${getRiskInfo(r).name}</strong><br/>${getRiskInfo(r).desc}</div>`).join('')
+      : '<p>None detected — you\'re clear!</p>'
+    }
+    
+    <h2>Prioritized Fixes</h2>
+    ${analysisData.fixes.map((fix, i) => `
+      <div class="fix">
+        <div class="priority ${fix.priority.toLowerCase()}">${fix.priority}</div>
+        <h3 style="margin-top: 8px;">${i + 1}. ${fix.section}</h3>
+        <p><strong>Issue:</strong> ${fix.issue}</p>
+        <p><strong>Fix:</strong> ${fix.fix}</p>
+        <p><strong>Impact:</strong> ${fix.impact}</p>
+      </div>
+    `).join('')}
+    
+    <div class="footer">
+      <p>© The Webinar Authority<br/>Built by AgenticWebinars.ai</p>
+    </div>
+  </body>
+</html>`;
+        
+        const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `webgenie-report-${analysisData.title.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.html`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        console.log('HTML report downloaded - open it and use Print to save as PDF');
+      } else {
+        console.log('Creating text download...');
+        const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `webgenie-report-${analysisData.title.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.txt`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        console.log('Text file download triggered');
+      }
+    } catch (error) {
+      console.error('Download error:', error);
+      alert('Download failed: ' + error.message);
+    }
+  };
 
-            const isAnalyzed = analysisData !== null;
-return (
-                <div className="min-h-screen bg-gradient-to-br from-purple-50 to-yellow-50">
-                    <div className="bg-gradient-to-r from-purple-700 to-purple-900 text-white py-6 px-8 shadow-lg">
-                        <h1 className="text-3xl font-bold">WebGenie Webinar Structure Checker v2</h1>
-                        <p className="text-purple-200 text-sm mt-1">by AgenticWebinars.ai at The Webinar Authority</p>
-                    </div>
+  const sectionLabels = {
+    introduction: 'Introduction',
+    stick: 'Stick Strategies',
+    salesStory: 'Sales Story',
+    setStage: 'Set the Stage',
+    coreContent: 'Core Content',
+    transition: 'Transition',
+    close: 'The Close',
+    layering: 'Layering',
+    prepWork: 'Prep Work'
+  };
 
-                    <div className="max-w-7xl mx-auto p-6">
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            <div className="bg-white rounded-lg shadow-lg p-6">
-                                <div className="flex items-center justify-between mb-4">
-                                    <h2 className="text-xl font-bold text-purple-900 flex items-center gap-2">
-                                        <FileText />
-                                        Drop Your Webinar Outline
-                                    </h2>
-                                    <button onClick={resetAll} className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-semibold hover:bg-gray-200 transition text-sm flex items-center gap-2">
-                                        <RotateCcw />
-                                        Reset
-                                    </button>
-                                </div>
-                                
-                                <div className="space-y-4">
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">Webinar Title</label>
-                                        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g., The 3-Step Client Magnet Method" className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none" />
-                                    </div>
+  const isAnalyzed = analysisData !== null;
 
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">Niche</label>
-                                        <select value={niche} onChange={(e) => setNiche(e.target.value)} className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none">
-                                            <option value="">Select your niche...</option>
-                                            {niches.map(n => <option key={n} value={n}>{n}</option>)}
-                                        </select>
-                                    </div>
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-yellow-50">
+      <div className="bg-gradient-to-r from-purple-700 to-purple-900 text-white py-6 px-8 shadow-lg">
+        <h1 className="text-3xl font-bold">WebGenie Webinar Structure Checker v2</h1>
+        <p className="text-purple-200 text-sm mt-1">by AgenticWebinars.ai at The Webinar Authority</p>
+      </div>
 
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">Target Audience</label>
-                                        <input type="text" value={audience} onChange={(e) => setAudience(e.target.value)} placeholder="e.g., Solo coaches ready to scale" className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none" />
-                                    </div>
+      <div className="max-w-7xl mx-auto p-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold text-purple-900 flex items-center gap-2">
+                <FileText className="w-5 h-5" />
+                Drop Your Webinar Outline
+              </h2>
+              <button
+                onClick={resetAll}
+                className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-semibold hover:bg-gray-200 transition text-sm flex items-center gap-2"
+              >
+                <RotateCcw className="w-4 h-4" />
+                Reset
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Webinar Title</label>
+                <input
+                  type="text"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="e.g., The 3-Step Client Magnet Method"
+                  className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none"
+                />
+              </div>
 
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">Your Outline</label>
-                                        <textarea value={outline} onChange={(e) => setOutline(e.target.value)} placeholder="Paste your webinar outline here, or upload a file below..." rows={8} className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none font-mono text-sm" />
-                                    </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Niche</label>
+                <select
+                  value={niche}
+                  onChange={(e) => setNiche(e.target.value)}
+                  className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none"
+                >
+                  <option value="">Select your niche...</option>
+                  {niches.map(n => <option key={n} value={n}>{n}</option>)}
+                </select>
+              </div>
 
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">Or Upload File</label>
-                                        <label className="flex items-center justify-center gap-2 px-4 py-3 bg-purple-50 border-2 border-purple-300 border-dashed rounded-lg cursor-pointer hover:bg-purple-100 transition">
-                                            <Upload />
-                                            <span className="text-sm text-purple-700 font-medium">Upload .txt or .docx</span>
-                                            <input type="file" accept=".txt,.docx" onChange={handleFileUpload} className="hidden" />
-                                        </label>
-                                    </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Target Audience</label>
+                <input
+                  type="text"
+                  value={audience}
+                  onChange={(e) => setAudience(e.target.value)}
+                  placeholder="e.g., Solo coaches ready to scale"
+                  className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none"
+                />
+              </div>
 
-                                    <button onClick={analyzeOutline} disabled={outline.trim().length === 0} className={`w-full py-4 rounded-lg font-bold text-lg transition shadow-lg ${isAnalyzed ? 'bg-gradient-to-r from-yellow-400 to-yellow-500 text-gray-900 hover:from-yellow-500 hover:to-yellow-600' : 'bg-gradient-to-r from-purple-700 to-purple-900 text-white hover:from-purple-800 hover:to-purple-950 disabled:opacity-50 disabled:cursor-not-allowed'}`}>
-                                        {isAnalyzed ? 'Analysis Completed! See Results Below!' : 'Analyze Now → Get Your Scores'}
-                                    </button>
-                                </div>
-                            </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Your Outline</label>
+                <textarea
+                  value={outline}
+                  onChange={(e) => setOutline(e.target.value)}
+                  placeholder="Paste your webinar outline here, or upload a file below..."
+                  rows={8}
+                  className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none font-mono text-sm"
+                />
+              </div>
 
-                            <div className="bg-white rounded-lg shadow-lg p-6">
-                                <div className="flex gap-2 mb-6 border-b-2 border-gray-200">
-                                    <button onClick={() => setActiveTab('results')} className={`px-4 py-2 font-semibold transition ${activeTab === 'results' ? 'text-purple-700 border-b-2 border-purple-700 -mb-0.5' : 'text-gray-500 hover:text-gray-700'}`}>Results</button>
-                                    <button onClick={() => setActiveTab('preview')} className={`px-4 py-2 font-semibold transition ${activeTab === 'preview' ? 'text-purple-700 border-b-2 border-purple-700 -mb-0.5' : 'text-gray-500 hover:text-gray-700'}`}>
-                                        <Eye style={{display:'inline',marginRight:'4px'}} />
-                                        Preview
-                                    </button>
-                                    <button onClick={() => setActiveTab('history')} className={`px-4 py-2 font-semibold transition ${activeTab === 'history' ? 'text-purple-700 border-b-2 border-purple-700 -mb-0.5' : 'text-gray-500 hover:text-gray-700'}`}>
-                                        <History style={{display:'inline',marginRight:'4px'}} />
-                                        History
-                                    </button>
-                                </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Or Upload File</label>
+                <label className="flex items-center justify-center gap-2 px-4 py-3 bg-purple-50 border-2 border-purple-300 border-dashed rounded-lg cursor-pointer hover:bg-purple-100 transition">
+                  <Upload className="w-5 h-5 text-purple-600" />
+                  <span className="text-sm text-purple-700 font-medium">Upload .txt or .docx</span>
+                  <input
+                    type="file"
+                    accept=".txt,.docx"
+                    onChange={handleFileUpload}
+                    className="hidden"
+                  />
+                </label>
+              </div>
 
-                                {!analysisData && activeTab === 'results' && (
-                                    <div className="text-center py-16">
-                                        <FileText style={{width:64,height:64,margin:'0 auto 16px',color:'#d1d5db'}} />
-                                        <p className="text-gray-500 text-lg">Ready when you are.</p>
-                                        <p className="text-gray-400 text-sm mt-2">Drop your outline and hit Analyze.</p>
-                                    </div>
-                                )}
+              <button
+                onClick={analyzeOutline}
+                disabled={outline.trim().length === 0}
+                className={`w-full py-4 rounded-lg font-bold text-lg transition shadow-lg ${
+                  isAnalyzed 
+                    ? 'bg-gradient-to-r from-yellow-400 to-yellow-500 text-gray-900 hover:from-yellow-500 hover:to-yellow-600' 
+                    : 'bg-gradient-to-r from-purple-700 to-purple-900 text-white hover:from-purple-800 hover:to-purple-950 disabled:opacity-50 disabled:cursor-not-allowed'
+                }`}
+              >
+                {isAnalyzed ? 'Analysis Completed! See Results Below!' : 'Analyze Now → Get Your Scores'}
+              </button>
+            </div>
+          </div>
 
-                                {analysisData && activeTab === 'results' && (
-                                    <div className="space-y-6">
-                                        <div className="bg-gradient-to-r from-purple-700 to-purple-900 text-white rounded-lg p-6 text-center">
-                                            <div className="text-5xl font-bold mb-2">{analysisData.avgScore}</div>
-                                            <div className="text-purple-200">Overall Score</div>
-                                        </div>
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <div className="flex gap-2 mb-6 border-b-2 border-gray-200">
+              <button
+                onClick={() => setActiveTab('results')}
+                className={`px-4 py-2 font-semibold transition ${
+                  activeTab === 'results'
+                    ? 'text-purple-700 border-b-2 border-purple-700 -mb-0.5'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                Results
+              </button>
+              <button
+                onClick={() => setActiveTab('preview')}
+                className={`px-4 py-2 font-semibold transition ${
+                  activeTab === 'preview'
+                    ? 'text-purple-700 border-b-2 border-purple-700 -mb-0.5'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                <Eye className="w-4 h-4 inline mr-1" />
+                Report Preview
+              </button>
+              <button
+                onClick={() => setActiveTab('history')}
+                className={`px-4 py-2 font-semibold transition ${
+                  activeTab === 'history'
+                    ? 'text-purple-700 border-b-2 border-purple-700 -mb-0.5'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                <History className="w-4 h-4 inline mr-1" />
+                History
+              </button>
+            </div>
 
-                                        {analysisData.risks.length > 0 && (
-                                            <div>
-                                                <h3 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
-                                                    <AlertTriangle />
-                                                    Core Four Risks Detected
-                                                </h3>
-                                                <div className="space-y-2">
-                                                    {analysisData.risks.map(risk => {
-                                                        const info = getRiskInfo(risk);
-                                                        return (
-                                                            <div key={risk} className={`${info.color} text-white p-3 rounded-lg`}>
-                                                                <div className="font-bold">{info.name}</div>
-                                                                <div className="text-sm opacity-90">{info.desc}</div>
-                                                            </div>
-                                                        );
-                                                    })}
-                                                </div>
-                                            </div>
-                                        )}
+            {!analysisData && activeTab === 'results' && (
+              <div className="text-center py-16">
+                <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                <p className="text-gray-500 text-lg">Ready when you are.</p>
+                <p className="text-gray-400 text-sm mt-2">Drop your outline and hit Analyze.</p>
+              </div>
+            )}
 
-                                        <div>
-                                            <h3 className="font-bold text-gray-900 mb-3">Section Breakdown</h3>
-                                            <div className="space-y-2">
-                                                {Object.entries(analysisData.scores).map(([key, score]) => (
-                                                    <div key={key} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                                                        <span className="font-medium text-gray-700">{sectionLabels[key]}</span>
-                                                        <span className={`px-3 py-1 rounded-full font-bold ${getScoreColor(score)}`}>{score}</span>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-
-                                        <div>
-                                            <h3 className="font-bold text-gray-900 mb-3">Your Fix-It Plan (Prioritized)</h3>
-                                            <div className="space-y-4">
-                                                {analysisData.fixes.map((fix, i) => (
-                                                    <div key={i} className="border-l-4 border-purple-600 pl-4 py-2">
-                                                        <div className="flex items-start gap-2 mb-1">
-                                                            <span className={`px-2 py-0.5 text-xs font-bold rounded ${fix.priority === 'CRITICAL' ? 'bg-red-100 text-red-700' : fix.priority === 'HIGH' ? 'bg-orange-100 text-orange-700' : fix.priority === 'MEDIUM' ? 'bg-yellow-100 text-yellow-700' : 'bg-gray-100 text-gray-700'}`}>{fix.priority}</span>
-                                                            <span className="font-bold text-gray-900">{fix.section}</span>
-                                                        </div>
-                                                        <div className="text-sm text-gray-600 mb-1"><strong>Issue:</strong> {fix.issue}</div>
-                                                        <div className="text-sm text-gray-900 mb-1"><strong>Fix:</strong> {fix.fix}</div>
-                                                        <div className="text-sm text-purple-700"><strong>Impact:</strong> {fix.impact}</div>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-
-                                        <div className="flex gap-3 pt-4">
-                                            <button onClick={() => downloadReport('pdf')} className="flex-1 bg-yellow-400 text-gray-900 py-3 rounded-lg font-bold hover:bg-yellow-500 transition flex items-center justify-center gap-2">
-                                                <Download />
-                                                Download PDF
-                                            </button>
-                                            <button onClick={() => downloadReport('docx')} className="flex-1 bg-yellow-400 text-gray-900 py-3 rounded-lg font-bold hover:bg-yellow-500 transition flex items-center justify-center gap-2">
-                                                <Download />
-                                                Download DOCX
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
-
-                                {activeTab === 'preview' && analysisData && (
-                                    <div className="prose max-w-none text-sm bg-gray-50 p-6 rounded-lg overflow-auto max-h-[600px]">
-                                        <h2 className="text-purple-900">WebGenie Fix-It Report</h2>
-                                        <p><strong>{analysisData.title}</strong></p>
-                                        <p className="text-gray-600">Generated: {analysisData.timestamp}</p>
-                                        <p className="text-gray-600">Niche: {analysisData.niche} | Audience: {analysisData.audience}</p>
-                                        <h3 className="text-purple-900 mt-6">Overall Score: {analysisData.avgScore}/100</h3>
-                                        <h3 className="text-purple-900 mt-6">Section Scores</h3>
-                                        <ul>{Object.entries(analysisData.scores).map(([key, score]) => (<li key={key}>{sectionLabels[key]}: {score}/100</li>))}</ul>
-                                        <h3 className="text-purple-900 mt-6">Core Four Risks</h3>
-                                        {analysisData.risks.length > 0 ? (<ul>{analysisData.risks.map(r => <li key={r}>{getRiskInfo(r).name}</li>)}</ul>) : (<p>None detected!</p>)}
-                                        <h3 className="text-purple-900 mt-6">Prioritized Fixes</h3>
-                                        {analysisData.fixes.map((fix, i) => (
-                                            <div key={i} className="mb-4">
-                                                <h4 className="text-gray-900">{i + 1}. [{fix.priority}] {fix.section}</h4>
-                                                <p><strong>Issue:</strong> {fix.issue}</p>
-                                                <p><strong>Fix:</strong> {fix.fix}</p>
-                                                <p><strong>Impact:</strong> {fix.impact}</p>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-
-                                {activeTab === 'history' && (
-                                    <div className="space-y-3">
-                                        {history.length === 0 ? (
-                                            <div className="text-center py-16">
-                                                <History style={{width:64,height:64,margin:'0 auto 16px',color:'#d1d5db'}} />
-                                                <p className="text-gray-500">No analyses yet.</p>
-                                                <p className="text-gray-400 text-sm mt-2">Your last 10 runs will show here.</p>
-                                            </div>
-                                        ) : (
-                                            history.map((item, i) => (
-                                                <div key={i} className="border-2 border-gray-200 rounded-lg p-4 hover:border-purple-300 transition cursor-pointer">
-                                                    <div className="flex justify-between items-start mb-2">
-                                                        <div className="font-bold text-gray-900">{item.title}</div>
-                                                        <div className={`px-3 py-1 rounded-full font-bold text-sm ${getScoreColor(item.avgScore)}`}>{item.avgScore}</div>
-                                                    </div>
-                                                    <div className="text-sm text-gray-600">{item.timestamp}</div>
-                                                    {item.risks.length > 0 && (
-                                                        <div className="flex gap-1 mt-2 flex-wrap">
-                                                            {item.risks.map(r => (
-                                                                <span key={r} className={`${getRiskInfo(r).color} text-white text-xs px-2 py-1 rounded`}>{getRiskInfo(r).name}</span>
-                                                            ))}
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            ))
-                                        )}
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="bg-purple-900 text-white text-center py-4 mt-12">
-                        <p className="text-sm">© The Webinar Authority</p>
-                    </div>
+            {analysisData && activeTab === 'results' && (
+              <div className="space-y-6">
+                <div className="bg-gradient-to-r from-purple-700 to-purple-900 text-white rounded-lg p-6 text-center">
+                  <div className="text-5xl font-bold mb-2">{analysisData.avgScore}</div>
+                  <div className="text-purple-200">Overall Score</div>
                 </div>
-            );
-        }
-ReactDOM.render(<WebGenieChecker />, document.getElementById('root'));
+
+                {analysisData.risks.length > 0 && (
+                  <div>
+                    <h3 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
+                      <AlertTriangle className="w-5 h-5 text-red-500" />
+                      Core Four Risks Detected
+                    </h3>
+                    <div className="space-y-2">
+                      {analysisData.risks.map(risk => {
+                        const info = getRiskInfo(risk);
+                        return (
+                          <div key={risk} className={`${info.color} text-white p-3 rounded-lg`}>
+                            <div className="font-bold">{info.name}</div>
+                            <div className="text-sm opacity-90">{info.desc}</div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                <div>
+                  <h3 className="font-bold text-gray-900 mb-3">Section Breakdown</h3>
+                  <div className="space-y-2">
+                    {Object.entries(analysisData.scores).map(([key, score]) => (
+                      <div key={key} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                        <span className="font-medium text-gray-700">{sectionLabels[key]}</span>
+                        <span className={`px-3 py-1 rounded-full font-bold ${getScoreColor(score)}`}>
+                          {score}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="font-bold text-gray-900 mb-3">Your Fix-It Plan (Prioritized)</h3>
+                  <div className="space-y-4">
+                    {analysisData.fixes.map((fix, i) => (
+                      <div key={i} className="border-l-4 border-purple-600 pl-4 py-2">
+                        <div className="flex items-start gap-2 mb-1">
+                          <span className={`px-2 py-0.5 text-xs font-bold rounded ${
+                            fix.priority === 'CRITICAL' ? 'bg-red-100 text-red-700' :
+                            fix.priority === 'HIGH' ? 'bg-orange-100 text-orange-700' :
+                            fix.priority === 'MEDIUM' ? 'bg-yellow-100 text-yellow-700' :
+                            'bg-gray-100 text-gray-700'
+                          }`}>
+                            {fix.priority}
+                          </span>
+                          <span className="font-bold text-gray-900">{fix.section}</span>
+                        </div>
+                        <div className="text-sm text-gray-600 mb-1">
+                          <strong>Issue:</strong> {fix.issue}
+                        </div>
+                        <div className="text-sm text-gray-900 mb-1">
+                          <strong>Fix:</strong> {fix.fix}
+                        </div>
+                        <div className="text-sm text-purple-700">
+                          <strong>Impact:</strong> {fix.impact}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex gap-3 pt-4">
+                  <button
+                    onClick={() => downloadReport('pdf')}
+                    className="flex-1 bg-yellow-400 text-gray-900 py-3 rounded-lg font-bold hover:bg-yellow-500 transition flex items-center justify-center gap-2"
+                  >
+                    <Download className="w-5 h-5" />
+                    Download PDF
+                  </button>
+                  <button
+                    onClick={() => downloadReport('docx')}
+                    className="flex-1 bg-yellow-400 text-gray-900 py-3 rounded-lg font-bold hover:bg-yellow-500 transition flex items-center justify-center gap-2"
+                  >
+                    <Download className="w-5 h-5" />
+                    Download DOCX
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'preview' && analysisData && (
+              <div className="prose max-w-none text-sm bg-gray-50 p-6 rounded-lg overflow-auto max-h-[600px]">
+                <h2 className="text-purple-900">WebGenie Fix-It Report</h2>
+                <p><strong>{analysisData.title}</strong></p>
+                <p className="text-gray-600">Generated: {analysisData.timestamp}</p>
+                <p className="text-gray-600">Niche: {analysisData.niche}</p>
+                <p className="text-gray-600">Audience: {analysisData.audience}</p>
+                
+                <h3 className="text-purple-900 mt-6">Overall Score: {analysisData.avgScore}/100</h3>
+                
+                <h3 className="text-purple-900 mt-6">Section Scores</h3>
+                <ul>
+                  {Object.entries(analysisData.scores).map(([key, score]) => (
+                    <li key={key}>{sectionLabels[key]}: {score}/100</li>
+                  ))}
+                </ul>
+
+                <h3 className="text-purple-900 mt-6">Core Four Risks Detected</h3>
+                {analysisData.risks.length > 0 ? (
+                  <ul>
+                    {analysisData.risks.map(r => <li key={r}>{getRiskInfo(r).name}</li>)}
+                  </ul>
+                ) : (
+                  <p>None detected — you're clear!</p>
+                )}
+
+                <h3 className="text-purple-900 mt-6">Prioritized Fixes</h3>
+                {analysisData.fixes.map((fix, i) => (
+                  <div key={i} className="mb-4">
+                    <h4 className="text-gray-900">{i + 1}. [{fix.priority}] {fix.section}</h4>
+                    <p><strong>Issue:</strong> {fix.issue}</p>
+                    <p><strong>Fix:</strong> {fix.fix}</p>
+                    <p><strong>Impact:</strong> {fix.impact}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {activeTab === 'history' && (
+              <div className="space-y-3">
+                {history.length === 0 ? (
+                  <div className="text-center py-16">
+                    <History className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                    <p className="text-gray-500">No analyses yet.</p>
+                    <p className="text-gray-400 text-sm mt-2">Your last 10 runs will show here.</p>
+                  </div>
+                ) : (
+                  history.map((item, i) => (
+                    <div key={i} className="border-2 border-gray-200 rounded-lg p-4 hover:border-purple-300 transition cursor-pointer">
+                      <div className="flex justify-between items-start mb-2">
+                        <div className="font-bold text-gray-900">{item.title}</div>
+                        <div className={`px-3 py-1 rounded-full font-bold text-sm ${getScoreColor(item.avgScore)}`}>
+                          {item.avgScore}
+                        </div>
+                      </div>
+                      <div className="text-sm text-gray-600">{item.timestamp}</div>
+                      {item.risks.length > 0 && (
+                        <div className="flex gap-1 mt-2 flex-wrap">
+                          {item.risks.map(r => (
+                            <span key={r} className={`${getRiskInfo(r).color} text-white text-xs px-2 py-1 rounded`}>
+                              {getRiskInfo(r).name}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-purple-900 text-white text-center py-4 mt-12">
+        <p className="text-sm">© The Webinar Authority</p>
+      </div>
+    </div>
+  );
+};
+
+export default WebGenieChecker;ReactDOM.render(<WebGenieChecker />, document.getElementById('root'));
     </script>
 </body>
 </html>
