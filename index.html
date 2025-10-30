@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebGenie Webinar Structure Checker v2</title>
+    <title>WebGenie Webinar Structure Checker v2 | The Webinar Authority</title>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -12,31 +12,565 @@
 <body>
     <div id="root"></div>
     <script type="text/babel">
-    // This is a placeholder - the full WebGenie code is too large for this format
-    // After you complete the GitHub/Netlify setup, I'll help you update this file
-    
-    const TestApp = () => (
-        <div className="min-h-screen bg-gradient-to-br from-purple-50 to-yellow-50 p-8">
-            <div className="max-w-4xl mx-auto">
-                <div className="bg-gradient-to-r from-purple-700 to-purple-900 text-white py-8 px-8 rounded-t-lg shadow-lg">
-                    <h1 className="text-3xl font-bold">WebGenie Webinar Structure Checker v2</h1>
-                    <p className="text-purple-200 text-sm mt-2">by AgenticWebinars.ai at The Webinar Authority</p>
-                </div>
-                <div className="bg-white p-8 rounded-b-lg shadow-lg">
-                    <div className="text-center py-12">
-                        <h2 className="text-2xl font-bold text-purple-900 mb-4">✅ Deployment Successful!</h2>
-                        <p className="text-gray-600 mb-4">Your WebGenie tool is now live on Netlify.</p>
-                        <p className="text-sm text-gray-500">Next step: Update this file with the full WebGenie code.</p>
+        const { useState } = React;
+        
+        // Icon Components
+        const Upload = () => (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+        );
+        
+        const FileText = () => (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+        );
+        
+        const AlertTriangle = () => (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                <line x1="12" y1="9" x2="12" y2="13"/>
+                <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+        );
+        
+        const Download = () => (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+        );
+        
+        const History = () => (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                <path d="M3 3v5h5"/>
+                <path d="M12 7v5l4 2"/>
+            </svg>
+        );
+        
+        const Eye = () => (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                <circle cx="12" cy="12" r="3"/>
+            </svg>
+        );
+        
+        const RotateCcw = () => (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                <path d="M3 3v5h5"/>
+            </svg>
+        );
+
+        function WebGenieChecker() {
+            const [activeTab, setActiveTab] = useState('results');
+            const [outline, setOutline] = useState('');
+            const [title, setTitle] = useState('');
+            const [niche, setNiche] = useState('');
+            const [audience, setAudience] = useState('');
+            const [analysisData, setAnalysisData] = useState(null);
+            const [history, setHistory] = useState([]);
+
+            const niches = [
+                'Leadership/Career',
+                'SaaS/Tech',
+                'Health & Wellness',
+                'Consultant',
+                'Marketing/Sales',
+                'Finance/Business',
+                'Other'
+            ];
+const handleFileUpload = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        setOutline(event.target.result);
+                    };
+                    reader.readAsText(file);
+                }
+            };
+
+            const resetAll = () => {
+                setOutline('');
+                setTitle('');
+                setNiche('');
+                setAudience('');
+                setAnalysisData(null);
+                setActiveTab('results');
+                const fileInput = document.querySelector('input[type="file"]');
+                if (fileInput) fileInput.value = '';
+            };
+
+            const getRiskInfo = (risk) => {
+                const riskData = {
+                    vanishing: { name: 'The Vanishing Act', color: 'bg-red-500', desc: 'No-shows killing your numbers' },
+                    crickets: { name: 'The Crickets Curse', color: 'bg-orange-500', desc: 'Zero engagement everywhere' },
+                    glazed: { name: 'The Eyes-Glazed Effect', color: 'bg-yellow-500', desc: 'Mentally checked out' },
+                    ghost: { name: 'The Post-Webinar Ghost', color: 'bg-purple-500', desc: 'Great vibes, zero sales' }
+                };
+                return riskData[risk];
+            };
+
+            const getScoreColor = (score) => {
+                if (score >= 80) return 'text-green-600 bg-green-50';
+                if (score >= 60) return 'text-yellow-600 bg-yellow-50';
+                return 'text-red-600 bg-red-50';
+            };
+
+            const sectionLabels = {
+                introduction: 'Introduction',
+                stick: 'Stick Strategies',
+                salesStory: 'Sales Story',
+                setStage: 'Set the Stage',
+                coreContent: 'Core Content',
+                transition: 'Transition',
+                close: 'The Close',
+                layering: 'Layering',
+                prepWork: 'Prep Work'
+            };
+
+            const analyzeOutline = () => {
+                const text = outline.toLowerCase();
+                
+                const baseScores = {
+                    introduction: text.includes('intro') || text.includes('welcome') || text.includes('hook') ? 85 : 45,
+                    stick: text.includes('stick') || text.includes('stay') || text.includes('why') ? 75 : 40,
+                    salesStory: text.includes('story') || text.includes('credibility') ? 80 : 35,
+                    setStage: text.includes('problem') || text.includes('pain') || text.includes('urgency') ? 90 : 50,
+                    coreContent: text.includes('teach') || text.includes('framework') || text.includes('step') ? 95 : 60,
+                    transition: text.includes('transition') || text.includes('next') || text.includes('invite') ? 70 : 30,
+                    close: text.includes('offer') || text.includes('cta') || text.includes('buy') ? 85 : 25,
+                    layering: text.includes('bonus') || text.includes('guarantee') ? 65 : 35,
+                    prepWork: text.includes('prep') || text.includes('survey') || text.includes('before') ? 60 : 40
+                };
+
+                const nicheWeights = {
+                    'Leadership/Career': { salesStory: 1.2, setStage: 1.1 },
+                    'SaaS/Tech': { coreContent: 1.3, transition: 1.1, close: 1.1 },
+                    'Health & Wellness': { setStage: 1.3, salesStory: 1.2, stick: 1.1 },
+                    'Consultant': { salesStory: 1.25, close: 1.2, transition: 1.15 }
+                };
+
+                const weights = nicheWeights[niche] || {};
+                const scores = {};
+                
+                Object.keys(baseScores).forEach(key => {
+                    scores[key] = Math.min(100, Math.round(baseScores[key] * (weights[key] || 1.0)));
+                });
+
+                const risks = [];
+                if (scores.stick < 70) risks.push('vanishing');
+                if (scores.coreContent < 80 || scores.stick < 70) risks.push('crickets');
+                if (scores.setStage < 70 || scores.coreContent < 85) risks.push('glazed');
+                if (scores.close < 70 || scores.transition < 60) risks.push('ghost');
+
+                const avgScore = Math.round(Object.values(scores).reduce((a, b) => a + b, 0) / 9);
+
+                const analysis = {
+                    timestamp: new Date().toLocaleString(),
+                    title: title || 'Untitled Webinar',
+                    niche: niche || 'Not specified',
+                    audience: audience || 'Not specified',
+                    scores,
+                    risks,
+                    avgScore,
+                    fixes: generateFixes(scores, niche)
+                };
+
+                setAnalysisData(analysis);
+                setActiveTab('results');
+                setHistory(prev => [analysis, ...prev.slice(0, 9)]);
+            };
+
+            const generateFixes = (scores, selectedNiche) => {
+                const fixes = [];
+                const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+                
+                if (scores.introduction < 70) {
+                    fixes.push({
+                        priority: 'HIGH',
+                        section: 'Introduction',
+                        issue: 'Your hook isn\'t landing — attendees won\'t know why they\'re here.',
+                        fix: 'Start with one clear sentence that names their goal. Follow with a promise they can picture: "In 45 minutes, you\'ll walk away with X." Keep it tight — 10 words or less.',
+                        impact: 'Stops tab-hopping in the first 90 seconds. When they know what\'s in it for them, they lean in.'
+                    });
+                }
+
+                if (scores.stick < 70) {
+                    fixes.push({
+                        priority: 'CRITICAL',
+                        section: 'Stick Strategies',
+                        issue: 'No reason to stay — half will bounce by minute 12.',
+                        fix: 'Add a "stay promise" in paragraph one: tell them the one thing they\'ll walk away with today. Then remind them every 8-10 minutes.',
+                        impact: 'Cuts early drop-off by 40%+. People stay when they trust you\'ll deliver.'
+                    });
+                }
+
+                if (scores.salesStory < 70) {
+                    let fix = {
+                        priority: 'HIGH',
+                        section: 'Sales Story',
+                        issue: 'Missing credibility bridge — they don\'t trust you yet.',
+                        fix: 'Share one 30-second story about someone you helped. Who they were, what changed, why it matters now.',
+                        impact: 'Builds trust before the sale. Stories create belief faster than credentials.'
+                    };
+                    
+                    if (selectedNiche === 'SaaS/Tech') {
+                        fix.fix = 'Use STR Arc: Start with the mess, surface the Trigger, reveal Result with metrics. "Company X lost 80% of users. We fixed onboarding. Conversion jumped 37%."';
+                    } else if (selectedNiche === 'Health & Wellness') {
+                        fix.fix = 'Lead with permission: "Sales is structured service." Share Dr. Leah\'s story: 52% conversion after optimizing her flow.';
+                    } else if (selectedNiche === 'Leadership/Career') {
+                        fix.fix = 'Use Struggle→Discovery→Transformation. "Sarah, stuck at director level. Discovery: invisible communication. Transformation: VP in 90 days."';
+                    } else if (selectedNiche === 'Consultant') {
+                        fix.fix = 'Use STR Arc: "VP trapped by 40% turnover. We found misaligned culture. Churn dropped 18% in 90 days." Proof with pulse.';
+                    }
+                    fixes.push(fix);
+                }
+
+                if (scores.setStage < 70) {
+                    fixes.push({
+                        priority: 'CRITICAL',
+                        section: 'Set the Stage',
+                        issue: 'Not enough urgency — they think they can fix this later.',
+                        fix: 'Name the cost of waiting: "If you don\'t fix this, here\'s what happens next." Paint staying stuck. Show the stakes.',
+                        impact: 'Creates decision energy. Urgency isn\'t pressure — it\'s clarity on what\'s at stake.'
+                    });
+                }
+
+                if (scores.coreContent < 85) {
+                    fixes.push({
+                        priority: 'MEDIUM',
+                        section: 'Core Content',
+                        issue: 'Teaching in course mode, not decision mode.',
+                        fix: 'Cut one framework. Replace with vivid before-and-after showing transformation, not just process. Show life on the other side.',
+                        impact: 'Shifts from "interesting" to "I need this now." Examples build belief faster than instructions.'
+                    });
+                }
+
+                if (scores.transition < 60) {
+                    let fix = {
+                        priority: 'CRITICAL',
+                        section: 'Transition',
+                        issue: 'Jarring shift to offer — kills momentum you built.',
+                        fix: 'Seed the CTA early. At 30%, mention "what winning looks like next." At 60-70%, it feels natural. Use "here\'s how we keep going."',
+                        impact: 'Makes offer feel like invitation, not interruption. Best closes don\'t feel like closes.'
+                    };
+                    
+                    if (selectedNiche === 'Leadership/Career') {
+                        fix.fix = 'Use "invite, don\'t chase." Say: "When you\'re ready to lead at the next level, this is your next step." Then present three tiers: DIY, Guided, Immersive.';
+                    } else if (selectedNiche === 'Consultant') {
+                        fix.fix = 'Say slowly: "If this aligns with your goals, let\'s map what it looks like in your practice." Pause. Silence signals confidence.';
+                    }
+                    fixes.push(fix);
+                }
+
+                if (scores.close < 70) {
+                    let fix = {
+                        priority: 'CRITICAL',
+                        section: 'The Close',
+                        issue: 'Offer comes too late or feels like afterthought.',
+                        fix: 'Make the ask at 60-70% while energy is high. One clear path, one deadline, one risk-reversal (bonus or guarantee).',
+                        impact: 'Converts while belief peaks. Timing matters as much as the offer itself.'
+                    };
+                    
+                    if (selectedNiche === 'SaaS/Tech') {
+                        fix.fix = 'Frame operationally: "Deploy templates, run first sprint, capture baseline metrics within 14 days." Make it sound like project scoping.';
+                    } else if (selectedNiche === 'Health & Wellness') {
+                        fix.fix = 'Frame as continued care: "This isn\'t another course. It\'s structured support so today\'s transformation becomes your new normal."';
+                    }
+                    fixes.push(fix);
+                }
+
+                if (scores.layering < 70) {
+                    fixes.push({
+                        priority: 'LOW',
+                        section: 'Layering',
+                        issue: 'Offer feels thin — missing bonuses or guarantees.',
+                        fix: 'Add one fast-action bonus or money-back guarantee. Frame as risk-reversal, not bribe.',
+                        impact: 'Removes last hesitation. Often they don\'t doubt the offer — they doubt the risk.'
+                    });
+                }
+
+                if (scores.prepWork < 70) {
+                    fixes.push({
+                        priority: 'MEDIUM',
+                        section: 'Prep Work',
+                        issue: 'Starting with cold audience — no pre-engagement.',
+                        fix: 'Send 2-question survey or quick micro-win before event. Warm them up before they join.',
+                        impact: 'Increases show-up and engagement. Warm audiences convert at 2-3x cold ones.'
+                    });
+                }
+
+                return fixes.sort((a, b) => {
+                    const priority = { CRITICAL: 0, HIGH: 1, MEDIUM: 2, LOW: 3 };
+                    return priority[a.priority] - priority[b.priority];
+                });
+            };
+
+            const downloadReport = (format) => {
+                if (!analysisData) return;
+                
+                const content = `WEBGENIE FIX-IT REPORT
+${analysisData.title}
+Generated: ${analysisData.timestamp}
+Niche: ${analysisData.niche}
+Audience: ${analysisData.audience}
+
+OVERALL SCORE: ${analysisData.avgScore}/100
+
+SECTION SCORES:
+${Object.entries(analysisData.scores).map(([key, score]) => 
+    `${sectionLabels[key]}: ${score}/100`
+).join('\n')}
+
+CORE FOUR RISKS:
+${analysisData.risks.length > 0 ? analysisData.risks.map(r => `• ${getRiskInfo(r).name}`).join('\n') : '• None detected!'}
+
+PRIORITIZED FIXES:
+${analysisData.fixes.map((fix, i) => `
+${i + 1}. [${fix.priority}] ${fix.section}
+Issue: ${fix.issue}
+Fix: ${fix.fix}
+Impact: ${fix.impact}
+`).join('\n')}
+
+---
+© The Webinar Authority
+Built by AgenticWebinars.ai`;
+
+                const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `webgenie-report-${analysisData.title.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.txt`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+            };
+
+            const isAnalyzed = analysisData !== null;
+return (
+                <div className="min-h-screen bg-gradient-to-br from-purple-50 to-yellow-50">
+                    <div className="bg-gradient-to-r from-purple-700 to-purple-900 text-white py-6 px-8 shadow-lg">
+                        <h1 className="text-3xl font-bold">WebGenie Webinar Structure Checker v2</h1>
+                        <p className="text-purple-200 text-sm mt-1">by AgenticWebinars.ai at The Webinar Authority</p>
+                    </div>
+
+                    <div className="max-w-7xl mx-auto p-6">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div className="bg-white rounded-lg shadow-lg p-6">
+                                <div className="flex items-center justify-between mb-4">
+                                    <h2 className="text-xl font-bold text-purple-900 flex items-center gap-2">
+                                        <FileText />
+                                        Drop Your Webinar Outline
+                                    </h2>
+                                    <button onClick={resetAll} className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-semibold hover:bg-gray-200 transition text-sm flex items-center gap-2">
+                                        <RotateCcw />
+                                        Reset
+                                    </button>
+                                </div>
+                                
+                                <div className="space-y-4">
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">Webinar Title</label>
+                                        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g., The 3-Step Client Magnet Method" className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none" />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">Niche</label>
+                                        <select value={niche} onChange={(e) => setNiche(e.target.value)} className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none">
+                                            <option value="">Select your niche...</option>
+                                            {niches.map(n => <option key={n} value={n}>{n}</option>)}
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">Target Audience</label>
+                                        <input type="text" value={audience} onChange={(e) => setAudience(e.target.value)} placeholder="e.g., Solo coaches ready to scale" className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none" />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">Your Outline</label>
+                                        <textarea value={outline} onChange={(e) => setOutline(e.target.value)} placeholder="Paste your webinar outline here, or upload a file below..." rows={8} className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none font-mono text-sm" />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">Or Upload File</label>
+                                        <label className="flex items-center justify-center gap-2 px-4 py-3 bg-purple-50 border-2 border-purple-300 border-dashed rounded-lg cursor-pointer hover:bg-purple-100 transition">
+                                            <Upload />
+                                            <span className="text-sm text-purple-700 font-medium">Upload .txt or .docx</span>
+                                            <input type="file" accept=".txt,.docx" onChange={handleFileUpload} className="hidden" />
+                                        </label>
+                                    </div>
+
+                                    <button onClick={analyzeOutline} disabled={outline.trim().length === 0} className={`w-full py-4 rounded-lg font-bold text-lg transition shadow-lg ${isAnalyzed ? 'bg-gradient-to-r from-yellow-400 to-yellow-500 text-gray-900 hover:from-yellow-500 hover:to-yellow-600' : 'bg-gradient-to-r from-purple-700 to-purple-900 text-white hover:from-purple-800 hover:to-purple-950 disabled:opacity-50 disabled:cursor-not-allowed'}`}>
+                                        {isAnalyzed ? 'Analysis Completed! See Results Below!' : 'Analyze Now → Get Your Scores'}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className="bg-white rounded-lg shadow-lg p-6">
+                                <div className="flex gap-2 mb-6 border-b-2 border-gray-200">
+                                    <button onClick={() => setActiveTab('results')} className={`px-4 py-2 font-semibold transition ${activeTab === 'results' ? 'text-purple-700 border-b-2 border-purple-700 -mb-0.5' : 'text-gray-500 hover:text-gray-700'}`}>Results</button>
+                                    <button onClick={() => setActiveTab('preview')} className={`px-4 py-2 font-semibold transition ${activeTab === 'preview' ? 'text-purple-700 border-b-2 border-purple-700 -mb-0.5' : 'text-gray-500 hover:text-gray-700'}`}>
+                                        <Eye style={{display:'inline',marginRight:'4px'}} />
+                                        Preview
+                                    </button>
+                                    <button onClick={() => setActiveTab('history')} className={`px-4 py-2 font-semibold transition ${activeTab === 'history' ? 'text-purple-700 border-b-2 border-purple-700 -mb-0.5' : 'text-gray-500 hover:text-gray-700'}`}>
+                                        <History style={{display:'inline',marginRight:'4px'}} />
+                                        History
+                                    </button>
+                                </div>
+
+                                {!analysisData && activeTab === 'results' && (
+                                    <div className="text-center py-16">
+                                        <FileText style={{width:64,height:64,margin:'0 auto 16px',color:'#d1d5db'}} />
+                                        <p className="text-gray-500 text-lg">Ready when you are.</p>
+                                        <p className="text-gray-400 text-sm mt-2">Drop your outline and hit Analyze.</p>
+                                    </div>
+                                )}
+
+                                {analysisData && activeTab === 'results' && (
+                                    <div className="space-y-6">
+                                        <div className="bg-gradient-to-r from-purple-700 to-purple-900 text-white rounded-lg p-6 text-center">
+                                            <div className="text-5xl font-bold mb-2">{analysisData.avgScore}</div>
+                                            <div className="text-purple-200">Overall Score</div>
+                                        </div>
+
+                                        {analysisData.risks.length > 0 && (
+                                            <div>
+                                                <h3 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
+                                                    <AlertTriangle />
+                                                    Core Four Risks Detected
+                                                </h3>
+                                                <div className="space-y-2">
+                                                    {analysisData.risks.map(risk => {
+                                                        const info = getRiskInfo(risk);
+                                                        return (
+                                                            <div key={risk} className={`${info.color} text-white p-3 rounded-lg`}>
+                                                                <div className="font-bold">{info.name}</div>
+                                                                <div className="text-sm opacity-90">{info.desc}</div>
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        <div>
+                                            <h3 className="font-bold text-gray-900 mb-3">Section Breakdown</h3>
+                                            <div className="space-y-2">
+                                                {Object.entries(analysisData.scores).map(([key, score]) => (
+                                                    <div key={key} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                                        <span className="font-medium text-gray-700">{sectionLabels[key]}</span>
+                                                        <span className={`px-3 py-1 rounded-full font-bold ${getScoreColor(score)}`}>{score}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <h3 className="font-bold text-gray-900 mb-3">Your Fix-It Plan (Prioritized)</h3>
+                                            <div className="space-y-4">
+                                                {analysisData.fixes.map((fix, i) => (
+                                                    <div key={i} className="border-l-4 border-purple-600 pl-4 py-2">
+                                                        <div className="flex items-start gap-2 mb-1">
+                                                            <span className={`px-2 py-0.5 text-xs font-bold rounded ${fix.priority === 'CRITICAL' ? 'bg-red-100 text-red-700' : fix.priority === 'HIGH' ? 'bg-orange-100 text-orange-700' : fix.priority === 'MEDIUM' ? 'bg-yellow-100 text-yellow-700' : 'bg-gray-100 text-gray-700'}`}>{fix.priority}</span>
+                                                            <span className="font-bold text-gray-900">{fix.section}</span>
+                                                        </div>
+                                                        <div className="text-sm text-gray-600 mb-1"><strong>Issue:</strong> {fix.issue}</div>
+                                                        <div className="text-sm text-gray-900 mb-1"><strong>Fix:</strong> {fix.fix}</div>
+                                                        <div className="text-sm text-purple-700"><strong>Impact:</strong> {fix.impact}</div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        <div className="flex gap-3 pt-4">
+                                            <button onClick={() => downloadReport('pdf')} className="flex-1 bg-yellow-400 text-gray-900 py-3 rounded-lg font-bold hover:bg-yellow-500 transition flex items-center justify-center gap-2">
+                                                <Download />
+                                                Download PDF
+                                            </button>
+                                            <button onClick={() => downloadReport('docx')} className="flex-1 bg-yellow-400 text-gray-900 py-3 rounded-lg font-bold hover:bg-yellow-500 transition flex items-center justify-center gap-2">
+                                                <Download />
+                                                Download DOCX
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {activeTab === 'preview' && analysisData && (
+                                    <div className="prose max-w-none text-sm bg-gray-50 p-6 rounded-lg overflow-auto max-h-[600px]">
+                                        <h2 className="text-purple-900">WebGenie Fix-It Report</h2>
+                                        <p><strong>{analysisData.title}</strong></p>
+                                        <p className="text-gray-600">Generated: {analysisData.timestamp}</p>
+                                        <p className="text-gray-600">Niche: {analysisData.niche} | Audience: {analysisData.audience}</p>
+                                        <h3 className="text-purple-900 mt-6">Overall Score: {analysisData.avgScore}/100</h3>
+                                        <h3 className="text-purple-900 mt-6">Section Scores</h3>
+                                        <ul>{Object.entries(analysisData.scores).map(([key, score]) => (<li key={key}>{sectionLabels[key]}: {score}/100</li>))}</ul>
+                                        <h3 className="text-purple-900 mt-6">Core Four Risks</h3>
+                                        {analysisData.risks.length > 0 ? (<ul>{analysisData.risks.map(r => <li key={r}>{getRiskInfo(r).name}</li>)}</ul>) : (<p>None detected!</p>)}
+                                        <h3 className="text-purple-900 mt-6">Prioritized Fixes</h3>
+                                        {analysisData.fixes.map((fix, i) => (
+                                            <div key={i} className="mb-4">
+                                                <h4 className="text-gray-900">{i + 1}. [{fix.priority}] {fix.section}</h4>
+                                                <p><strong>Issue:</strong> {fix.issue}</p>
+                                                <p><strong>Fix:</strong> {fix.fix}</p>
+                                                <p><strong>Impact:</strong> {fix.impact}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+
+                                {activeTab === 'history' && (
+                                    <div className="space-y-3">
+                                        {history.length === 0 ? (
+                                            <div className="text-center py-16">
+                                                <History style={{width:64,height:64,margin:'0 auto 16px',color:'#d1d5db'}} />
+                                                <p className="text-gray-500">No analyses yet.</p>
+                                                <p className="text-gray-400 text-sm mt-2">Your last 10 runs will show here.</p>
+                                            </div>
+                                        ) : (
+                                            history.map((item, i) => (
+                                                <div key={i} className="border-2 border-gray-200 rounded-lg p-4 hover:border-purple-300 transition cursor-pointer">
+                                                    <div className="flex justify-between items-start mb-2">
+                                                        <div className="font-bold text-gray-900">{item.title}</div>
+                                                        <div className={`px-3 py-1 rounded-full font-bold text-sm ${getScoreColor(item.avgScore)}`}>{item.avgScore}</div>
+                                                    </div>
+                                                    <div className="text-sm text-gray-600">{item.timestamp}</div>
+                                                    {item.risks.length > 0 && (
+                                                        <div className="flex gap-1 mt-2 flex-wrap">
+                                                            {item.risks.map(r => (
+                                                                <span key={r} className={`${getRiskInfo(r).color} text-white text-xs px-2 py-1 rounded`}>{getRiskInfo(r).name}</span>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ))
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="bg-purple-900 text-white text-center py-4 mt-12">
+                        <p className="text-sm">© The Webinar Authority</p>
                     </div>
                 </div>
-                <div className="bg-purple-900 text-white text-center py-4 mt-8 rounded-lg">
-                    <p className="text-sm">© The Webinar Authority</p>
-                </div>
-            </div>
-        </div>
-    );
-    
-    ReactDOM.render(<TestApp />, document.getElementById('root'));
+            );
+        }
+ReactDOM.render(<WebGenieChecker />, document.getElementById('root'));
     </script>
 </body>
 </html>
